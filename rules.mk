@@ -60,7 +60,7 @@ OBJS += $(AFILES:%.S=$(BUILD_DIR)/%.o)
 GENERATED_BINS = $(PROJECT).elf $(PROJECT).bin $(PROJECT).map $(PROJECT).list $(PROJECT).lss
 
 TGT_CPPFLAGS += -MD
-TGT_CPPFLAGS += -Wall -Wundef $(INCLUDES)
+TGT_CPPFLAGS += -Wall -Wundef
 TGT_CPPFLAGS += $(INCLUDES) $(OPENCM3_DEFS)
 
 TGT_CFLAGS += $(OPT) $(CSTD) -ggdb3
@@ -78,7 +78,7 @@ TGT_CXXFLAGS += -Wextra -Wshadow -Wredundant-decls  -Weffc++
 
 TGT_ASFLAGS += $(OPT) $(ARCH_FLAGS) -ggdb3
 
-TGT_LDFLAGS += -T$(LDSCRIPT) -L$(OPENCM3_DIR)/lib -nostartfiles
+TGT_LDFLAGS += -T$(LDSCRIPT) -L$(OPENCM3_DIR)/lib -L$(FREERTOS_DIR)/lib -nostartfiles
 TGT_LDFLAGS += $(ARCH_FLAGS)
 TGT_LDFLAGS += -specs=nano.specs
 TGT_LDFLAGS += -Wl,--gc-sections
@@ -94,7 +94,7 @@ LDLIBS += -l$(OPENCM3_LIB)
 endif
 # nosys is only in newer gcc-arm-embedded...
 #LDLIBS += -specs=nosys.specs
-LDLIBS += -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
+LDLIBS +=  -lfreertos -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
 
 # Burn in legacy hell fortran modula pascal yacc idontevenwat
 .SUFFIXES:
@@ -166,7 +166,7 @@ else
 		$(NULL)
 endif
 
-clean:
+clean: rtos_clean
 	rm -rf $(BUILD_DIR) $(GENERATED_BINS)
 
 .PHONY: all clean flash
