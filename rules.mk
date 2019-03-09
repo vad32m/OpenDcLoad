@@ -107,7 +107,7 @@ LDLIBS +=  -lfreertos -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
 %: s.%
 %: SCCS/s.%
 
-all: $(PROJECT).elf $(PROJECT).bin
+binary: $(PROJECT).elf $(PROJECT).bin
 flash: $(PROJECT).flash
 
 # error if not using linker script generator

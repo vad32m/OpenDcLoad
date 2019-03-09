@@ -84,4 +84,4 @@ rtos_clean:
 	$(Q)rm -rf $(FREERTOS_OBJDIR)
 	$(Q)rm $(FREERTOS_LIBDIR)/$(FREERTOS_OUTPUTFILE)
 
-.PHONY: rtos_lib rtos_clean
+.PHONY: rtos_clean
