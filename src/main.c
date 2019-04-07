@@ -1,18 +1,21 @@
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
-#include <libopencm3/cm3/systick.h>
-
 #include <libopencm3/stm32/dbgmcu.h>
-#include <libopencm3/cm3/scs.h>
-#include <libopencm3/cm3/tpiu.h>
+
+#include <libopencm3/cm3/systick.h>
+#include <libopencm3/cm3/nvic.h>
 #include <libopencm3/cm3/itm.h>
+#include <libopencm3/cm3/scb.h>
+#include <libopencm3/cm3/mpu.h>
 
 #include "FreeRTOS.h"
 #include "task.h"
 
-static void
-gpio_setup(void) {
+#define CONFIG_BUSFAULT_INTERRUPT_PRIORITY 0x1
 
+static void
+gpio_setup(void)
+{
    /* Enable GPIOC clock. */
    rcc_periph_clock_enable(RCC_GPIOA);
    rcc_periph_clock_enable(RCC_GPIOB);
@@ -30,9 +33,7 @@ systick_setup(void)
     /* clock rate / 1000 to get 1mS interrupt rate */
     systick_set_reload(168000);
     systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
-    systick_counter_enable();
-    /* this done last */
-    systick_interrupt_enable();
+    systick_counter_enable(); 
 }
 
 /* Set STM32 to 168 MHz. */
@@ -45,56 +46,176 @@ clock_setup(void)
 static void
 trace_send_blocking(char c)
 {
-	while (!(ITM_STIM8(0) & ITM_STIM_FIFOREADY))
-		;
+	while (!(ITM_STIM8(0) & ITM_STIM_FIFOREADY)) {}
 
 	ITM_STIM8(0) = c;
 }
 
+void
+mem_manage_handler(void)
+{
+    while(1){}
+}
+
+void
+hard_fault_handler(void)
+{
+    while(1){}
+}
+
+void
+bus_fault_handler(void)
+{
+    while(1){}
+}
+
+void
+usage_fault_handler(void)
+{
+    while(1){}
+}
+
 static void
-task1(void *args __attribute((unused))) {
+irq_setup(void)
+{
+    SCB_AIRCR = SCB_AIRCR_VECTKEYSTAT
+                    | SCB_AIRCR_PRIGROUP_GROUP16_NOSUB;
+
+    SCB_SHCSR |= SCB_SHCSR_MEMFAULTENA
+                    | SCB_SHCSR_USGFAULTENA
+                    | SCB_SHCSR_BUSFAULTENA;
+    SCB_CCR |= SCB_CCR_DIV_0_TRP;
+    //No need to set priority for systick and pendsv, it is configured by FreeRTOS
+    nvic_enable_irq(NVIC_HARD_FAULT_IRQ);
+    nvic_enable_irq(NVIC_BUS_FAULT_IRQ);
+    nvic_enable_irq(NVIC_MEM_MANAGE_IRQ);
+    nvic_enable_irq(NVIC_USAGE_FAULT_IRQ);
+
+}
+
+volatile int* a = 0x0;
+volatile int *b = 0x08000000;
+
+static void
+task1(void *args __attribute((unused)))
+{
     for (;;) {
         gpio_toggle(GPIOA,GPIO7);
         vTaskDelay(pdMS_TO_TICKS(200));
-        trace_send_blocking('0');
+    }
+}
+#define MPU_RASR_SIZE_32B (0x04 << MPU_RASR_SIZE_LSB)
+#define MPU_RASR_SIZE_128KB (0x10 << MPU_RASR_SIZE_LSB)
+#define MPU_RASR_SIZE_512KB (0x12 << MPU_RASR_SIZE_LSB)
+#define MPU_RASR_SIZE_1MB (0x13 << MPU_RASR_SIZE_LSB)
+#define MPU_RASR_SIZE_32MB (0x18 << MPU_RASR_SIZE_LSB)
+#define MPU_RASR_SIZE_64MB (0x19 << MPU_RASR_SIZE_LSB)
+
+static void
+configure_mpu(void)
+{
+    if (MPU_TYPE && MPU_TYPE_DREGION) {
+        MPU_CTRL = 0; //MPU_CTRL_PRIVDEFENA is disabled
+
+        /**
+         * 0x0800 0000 - 512K RX
+         */
+        MPU_RNR = 0;
+        MPU_RBAR = 0x08000000;
+        MPU_RASR = MPU_RASR_ATTR_AP_PRO_URO | MPU_RASR_ATTR_C 
+                    | MPU_RASR_SIZE_512KB | MPU_RASR_ENABLE;
+
+        /**
+         * 0x2000 0000 - 128k RW region
+         */
+        MPU_RNR = 1;
+        MPU_RBAR = 0x20000000;
+        MPU_RASR = MPU_RASR_ATTR_AP_PRW_URW | MPU_RASR_ATTR_XN | MPU_RASR_ATTR_C 
+                    | MPU_RASR_ATTR_S | MPU_RASR_SIZE_128KB | MPU_RASR_ENABLE;
+
+        /**
+         * 0x2200 0000 32Mb RW bitband alias (8MB)
+         */
+        MPU_RNR = 2;
+        MPU_RBAR = 0x22000000;
+        MPU_RASR = MPU_RASR_ATTR_AP_PRW_URW | MPU_RASR_ATTR_XN | MPU_RASR_ATTR_C
+                    | MPU_RASR_ATTR_S | MPU_RASR_SIZE_32MB | MPU_RASR_ENABLE;
+
+        /**
+         * 0xE000 0000 1Mb RW - PPB (SCB SCS) (XN by default)
+         * There is no need to set up memory regions for Private Peripheral Bus (PPB)
+         */
+        MPU_RNR = 3;
+        MPU_RBAR = 0xE0000000;
+        MPU_RASR = MPU_RASR_ATTR_AP_PRW_URW | MPU_RASR_ATTR_XN | MPU_RASR_ATTR_B
+                    | MPU_RASR_ATTR_S | MPU_RASR_SIZE_1MB | MPU_RASR_ENABLE;
+
+        /**
+         * 0x4000 0000 32Mb RW - Peripherals + bitband (XN by default)
+         */
+        MPU_RNR = 4;
+        MPU_RBAR = 0x40000000;
+        MPU_RASR = MPU_RASR_ATTR_AP_PRW_URW | MPU_RASR_ATTR_XN | MPU_RASR_ATTR_B
+                    | MPU_RASR_ATTR_S | MPU_RASR_SIZE_32MB | MPU_RASR_ENABLE;
+
+        /**
+         * 0x0000 0000 - RO (FREERTOS fetches initial stack pointer from this address)
+         */
+        MPU_RNR = 5;
+        MPU_RBAR = 0x00000000;
+        MPU_RASR = MPU_RASR_ATTR_AP_PRO_UNO | MPU_RASR_ATTR_XN | MPU_RASR_ATTR_B
+                     | MPU_RASR_ATTR_S | MPU_RASR_SIZE_32B | MPU_RASR_ENABLE;
+        /**
+         * 0xA000 0000 32Mb RW - Peripheral (AHB3??
+         */
+
+
+		for (int i = 6; i < 8; i++) { // Disabled unused regions
+			MPU_RNR = i;
+			MPU_RBAR = 0;
+			MPU_RASR = 0;
+		}
+
+        MPU_CTRL |= MPU_CTRL_ENABLE;
     }
 }
 
-static void
-trace_setup(void)
-{
-	/* Enable trace subsystem (we'll use ITM and TPIU). */
-	/*SCS_DEMCR |= SCS_DEMCR_TRCENA;
-
-	/* Use Manchester code for asynchronous transmission. */
-	TPIU_SPPR = TPIU_SPPR_ASYNC_MANCHESTER;
-	TPIU_ACPR = 7;
-
-	/* Formatter and flush control. */
-	TPIU_FFCR &= ~TPIU_FFCR_ENFCONT;
-
-	/* Enable TRACESWO pin for async mode. */
-	DBGMCU_CR = DBGMCU_CR_TRACE_IOEN | DBGMCU_CR_TRACE_MODE_ASYNC;
-
-	/* Unlock access to ITM registers. */
-	/* FIXME: Magic numbers... Is this Cortex-M3 generic? */
-	*((volatile uint32_t *)0xE0000FB0) = 0xC5ACCE55;
-
-	/* Enable ITM with ID = 1. */
-	ITM_TCR = (1 << 16) | ITM_TCR_ITMENA;
-	/* Enable stimulus port 1. */
-	ITM_TER[0] = 1;
-}
-
+#define TEST_BUS_FAULT 0
+#define TEST_USAGE_FAULT 0
+#define TEST_MEMMANAG_FAULT 0
+#define TEST_DIV0_FAULT 0
 
 
 int
-main(void) {
-    int i;
+main(void)
+{
 
     clock_setup();
     systick_setup();
     gpio_setup();
+    irq_setup();
+    configure_mpu();
+    
+    #if TEST_BUS_FAULT
+    //trigger precise bus fault by accessing memory behind the end of the RAM
+    extern int _stack;
+    int* behind_the_end = &_stack + 4;
+    volatile int a = *behind_the_end;
+    #endif
+
+    #if TEST_USAGE_FAULT
+    asm volatile("udf.w");
+    #endif
+
+    #if TEST_MEMMANAG_FAULT
+    void (*exec_never_region)(void) = 0x40000000;
+    exec_never_region();
+    #endif
+
+    #if TEST_DIV0_FAULT
+    int a = 0;
+    volatile int b = 10/a;
+    #endif
 
     xTaskCreate(task1, "LED", 100, NULL, configMAX_PRIORITIES - 1, NULL);
     vTaskStartScheduler();

@@ -10,7 +10,7 @@
 # FREERTOS_OUTPUTFILE - name for output library (libfreertos.a per default)
 # FREERTOS_DEFS - any preprocessor data
 # FREERTOS_OPT - full -O flag, defaults to -Os
-# CSTD - defaults -std=c99
+# FREERTOS_CSTD - defaults -std=c99
 
 
 # Specify the target file and the install directory
@@ -18,7 +18,7 @@ FREERTOS_OUTPUTFILE  ?= libfreertos.a
 FREERTOS_LIBDIR ?= $(FREERTOS_DIR)/lib/
 
 FREERTOS_OPT ?= -Os
-CSTD ?= -std=c99
+FREERTOS_CSTD ?= -std=c99
 
 # Be silent per default, but 'make V=1' will show all compiler calls.
 # If you're insane, V=99 will print out all sorts of things.
@@ -52,7 +52,7 @@ FREERTOS_CPPFLAGS += -MD
 FREERTOS_CPPFLAGS += -Wall -Wundef
 FREERTOS_CPPFLAGS += $(FREERTOS_INCLUDES) $(FREERTOS_DEFS)
 
-FREERTOS_CFLAGS += $(OPT) $(CSTD) -ggdb3
+FREERTOS_CFLAGS += $(OPT) $(FREERTOS_CSTD) -ggdb3
 FREERTOS_CFLAGS += $(FREERTOS_ARCH_FLAGS)
 FREERTOS_CFLAGS += -fno-common
 FREERTOS_CFLAGS += -ffunction-sections -fdata-sections

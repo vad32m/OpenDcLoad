@@ -24,7 +24,7 @@ PROJECT = electronic_load
 LDSCRIPT = ./tools/stm32f407.ld
 OPENCM3_LIB = opencm3_stm32f4
 LIBDEPS = rtos_lib
-
+CSTD = 
 debug: OPENCM3_DEFS = -DSTM32F4 -DDEBUG
 debug: OPT = -Og
 
