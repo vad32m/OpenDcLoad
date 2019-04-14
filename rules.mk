@@ -80,7 +80,7 @@ TGT_ASFLAGS += $(OPT) $(ARCH_FLAGS) -ggdb3
 
 TGT_LDFLAGS += -T$(LDSCRIPT) -L$(OPENCM3_DIR)/lib -L$(FREERTOS_DIR)/lib -nostartfiles
 TGT_LDFLAGS += $(ARCH_FLAGS)
-TGT_LDFLAGS += -specs=nano.specs
+TGT_LDFLAGS += -specs=nano.specs -specs=nosys.specs
 TGT_LDFLAGS += -Wl,--gc-sections
 # OPTIONAL
 #TGT_LDFLAGS += -Wl,-Map=$(PROJECT).map
@@ -92,9 +92,7 @@ endif
 ifeq (,$(DEVICE))
 LDLIBS += -l$(OPENCM3_LIB)
 endif
-# nosys is only in newer gcc-arm-embedded...
-#LDLIBS += -specs=nosys.specs
-LDLIBS +=  -lfreertos -Wl,--start-group -lc -lnosys -Wl,--end-group
+LDLIBS +=  -lfreertos
 
 # Burn in legacy hell fortran modula pascal yacc idontevenwat
 .SUFFIXES:
