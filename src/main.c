@@ -8,6 +8,9 @@
 #include <libopencm3/cm3/scb.h>
 #include <libopencm3/cm3/mpu.h>
 
+#include <stdlib.h>
+
+#include "fault_handler.h"
 #include "FreeRTOS.h"
 #include "task.h"
 
@@ -43,36 +46,28 @@ clock_setup(void)
     rcc_clock_setup_hse_3v3(&rcc_hse_8mhz_3v3[RCC_CLOCK_3V3_168MHZ]);
 }
 
-static void
-trace_send_blocking(char c)
-{
-	while (!(ITM_STIM8(0) & ITM_STIM_FIFOREADY)) {}
-
-	ITM_STIM8(0) = c;
-}
-
 void
 mem_manage_handler(void)
 {
-    while(1){}
+    HardFault_Handler();
 }
 
 void
 hard_fault_handler(void)
 {
-    while(1){}
+    HardFault_Handler();
 }
 
 void
 bus_fault_handler(void)
 {
-    while(1){}
+    HardFault_Handler();
 }
 
 void
 usage_fault_handler(void)
 {
-    while(1){}
+    HardFault_Handler();
 }
 
 static void
@@ -93,9 +88,6 @@ irq_setup(void)
 
 }
 
-volatile int* a = 0x0;
-volatile int *b = 0x08000000;
-
 static void
 task1(void *args __attribute((unused)))
 {
@@ -105,6 +97,7 @@ task1(void *args __attribute((unused)))
     }
 }
 #define MPU_RASR_SIZE_32B (0x04 << MPU_RASR_SIZE_LSB)
+#define MPU_RASR_SIZE_64KB (0x0F << MPU_RASR_SIZE_LSB)
 #define MPU_RASR_SIZE_128KB (0x10 << MPU_RASR_SIZE_LSB)
 #define MPU_RASR_SIZE_512KB (0x12 << MPU_RASR_SIZE_LSB)
 #define MPU_RASR_SIZE_1MB (0x13 << MPU_RASR_SIZE_LSB)
@@ -132,6 +125,7 @@ configure_mpu(void)
         MPU_RBAR = 0x20000000;
         MPU_RASR = MPU_RASR_ATTR_AP_PRW_URW | MPU_RASR_ATTR_XN | MPU_RASR_ATTR_C 
                     | MPU_RASR_ATTR_S | MPU_RASR_SIZE_128KB | MPU_RASR_ENABLE;
+
 
         /**
          * 0x2200 0000 32Mb RW bitband alias (8MB)
@@ -165,12 +159,20 @@ configure_mpu(void)
         MPU_RBAR = 0x00000000;
         MPU_RASR = MPU_RASR_ATTR_AP_PRO_UNO | MPU_RASR_ATTR_XN | MPU_RASR_ATTR_B
                      | MPU_RASR_ATTR_S | MPU_RASR_SIZE_32B | MPU_RASR_ENABLE;
+
+		/**
+		 * 0x1000 0000 - 64k CCM RAM RW region
+		 */
+		MPU_RNR = 6;
+		MPU_RBAR = 0x10000000;
+		MPU_RASR = MPU_RASR_ATTR_AP_PRW_URW | MPU_RASR_ATTR_XN | MPU_RASR_ATTR_C
+				| MPU_RASR_ATTR_S | MPU_RASR_SIZE_64KB | MPU_RASR_ENABLE;
         /**
          * 0xA000 0000 32Mb RW - Peripheral (AHB3??
          */
 
 
-		for (int i = 6; i < 8; i++) { // Disabled unused regions
+		for (int i = 7; i < 8; i++) { // Disabled unused regions
 			MPU_RNR = i;
 			MPU_RBAR = 0;
 			MPU_RASR = 0;
@@ -185,7 +187,6 @@ configure_mpu(void)
 #define TEST_MEMMANAG_FAULT 0
 #define TEST_DIV0_FAULT 0
 
-
 int
 main(void)
 {
@@ -196,6 +197,9 @@ main(void)
     irq_setup();
     configure_mpu();
     
+    volatile char *example = malloc(10);
+    *example = 10;
+
     #if TEST_BUS_FAULT
     //trigger precise bus fault by accessing memory behind the end of the RAM
     extern int _stack;

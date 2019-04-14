@@ -1,3 +1,6 @@
 [submodule "libopencm3"]
 	path = libopencm3
 	url = https://github.com/libopencm3/libopencm3.git
+[submodule "src/fault_handlers"]
+	path = src/fault_handlers
+	url = git@github.com:vad32m/arm-hard-fault-handler.git

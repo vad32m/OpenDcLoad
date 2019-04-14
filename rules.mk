@@ -94,7 +94,7 @@ LDLIBS += -l$(OPENCM3_LIB)
 endif
 # nosys is only in newer gcc-arm-embedded...
 #LDLIBS += -specs=nosys.specs
-LDLIBS +=  -lfreertos -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
+LDLIBS +=  -lfreertos -Wl,--start-group -lc -lnosys -Wl,--end-group
 
 # Burn in legacy hell fortran modula pascal yacc idontevenwat
 .SUFFIXES:
