@@ -9,6 +9,9 @@
 #include <libopencm3/cm3/mpu.h>
 
 #include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+#include <stdio.h>
 
 #include "fault_handler.h"
 #include "FreeRTOS.h"
@@ -186,6 +189,7 @@ configure_mpu(void)
 #define TEST_USAGE_FAULT 0
 #define TEST_MEMMANAG_FAULT 0
 #define TEST_DIV0_FAULT 0
+#define TEST_OUT_OF_MEMORY 0
 
 int
 main(void)
@@ -196,9 +200,22 @@ main(void)
     gpio_setup();
     irq_setup();
     configure_mpu();
-    
-    volatile char *example = malloc(10);
-    *example = 10;
+
+#if TEST_OUT_OF_MEMORY
+    for (int i = 0; true; i++)
+    {
+        volatile char *example = malloc(2048);
+
+        if (example)
+        {
+            *example = 10;
+        }
+        else
+        {
+            puts(strerror(errno));
+        }
+    }
+#endif
 
     #if TEST_BUS_FAULT
     //trigger precise bus fault by accessing memory behind the end of the RAM

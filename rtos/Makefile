@@ -43,7 +43,7 @@ FREERTOS_INCLUDES := $(patsubst %,-I%, $(FREERTOS_INCLUDES))
 FREERTOS_CFILES = \
 	$(shell find $(FREERTOS_DIR)/Source -maxdepth 1 -type f -name "*.c") \
 	$(shell find $(FREERTOS_DIR)/Source/portable/GCC/ARM_CM4F -maxdepth 1 -type f -name "*.c") \
-	$(FREERTOS_DIR)/Source/portable/MemMang/heap_4.c
+	$(FREERTOS_DIR)/Source/portable/MemMang/heap_3.c
 
 
 FREERTOS_OBJS = $(FREERTOS_CFILES:%.c=$(FREERTOS_OBJDIR)/%.o)
