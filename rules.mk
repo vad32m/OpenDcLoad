@@ -80,7 +80,7 @@ TGT_ASFLAGS += $(OPT) $(ARCH_FLAGS) -ggdb3
 
 TGT_LDFLAGS += -T$(LDSCRIPT) -L$(OPENCM3_DIR)/lib -L$(FREERTOS_DIR)/lib -nostartfiles
 TGT_LDFLAGS += $(ARCH_FLAGS)
-TGT_LDFLAGS += -specs=nano.specs -specs=nosys.specs
+TGT_LDFLAGS += -specs=nano.specs
 TGT_LDFLAGS += -Wl,--gc-sections
 # OPTIONAL
 #TGT_LDFLAGS += -Wl,-Map=$(PROJECT).map
