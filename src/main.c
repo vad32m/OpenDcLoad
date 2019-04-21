@@ -52,25 +52,29 @@ clock_setup(void)
 void
 mem_manage_handler(void)
 {
-    HardFault_Handler();
+    REPORT_STACK_FRAME
+    ReportMemanageFault();
 }
 
 void
 hard_fault_handler(void)
 {
-    HardFault_Handler();
+    REPORT_STACK_FRAME
+    ReportHardFault();
 }
 
 void
 bus_fault_handler(void)
 {
-    HardFault_Handler();
+    REPORT_STACK_FRAME
+    ReportBusFault();
 }
 
 void
 usage_fault_handler(void)
 {
-    HardFault_Handler();
+    REPORT_STACK_FRAME
+    ReportUsageFault();
 }
 
 static void
@@ -82,6 +86,7 @@ irq_setup(void)
     SCB_SHCSR |= SCB_SHCSR_MEMFAULTENA
                     | SCB_SHCSR_USGFAULTENA
                     | SCB_SHCSR_BUSFAULTENA;
+
     SCB_CCR |= SCB_CCR_DIV_0_TRP;
     //No need to set priority for systick and pendsv, it is configured by FreeRTOS
     nvic_enable_irq(NVIC_HARD_FAULT_IRQ);
@@ -199,7 +204,9 @@ main(void)
     systick_setup();
     gpio_setup();
     irq_setup();
+#if !TEST_BUS_FAULT
     configure_mpu();
+#endif
 
 #if TEST_OUT_OF_MEMORY
     for (int i = 0; true; i++)

@@ -17,9 +17,8 @@ FREERTOS_ARCH_FLAGS = $(ARCH_FLAGS)
 include ./rtos/Makefile
 
 CFILES = src/main.c \
-         src/fault_handlers/src/communication.c \
 	 src/fault_handlers/src/fault_handler.c \
-         src/syscalls.c
+     src/syscalls.c
 
 INCLUDES = $(FREERTOS_INCLUDES) \
            -I./src/fault_handlers/inc/
