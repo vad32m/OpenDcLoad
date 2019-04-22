@@ -232,7 +232,7 @@ main(void)
     #endif
 
     #if TEST_USAGE_FAULT
-    asm volatile("udf.w");
+    __asm volatile("udf.w");
     #endif
 
     #if TEST_MEMMANAG_FAULT
