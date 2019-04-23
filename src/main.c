@@ -13,7 +13,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "fault_handler.h"
 #include "FreeRTOS.h"
 #include "task.h"
 
@@ -47,34 +46,6 @@ static void
 clock_setup(void)
 {
     rcc_clock_setup_hse_3v3(&rcc_hse_8mhz_3v3[RCC_CLOCK_3V3_168MHZ]);
-}
-
-void
-mem_manage_handler(void)
-{
-    REPORT_STACK_FRAME
-    ReportMemanageFault();
-}
-
-void
-hard_fault_handler(void)
-{
-    REPORT_STACK_FRAME
-    ReportHardFault();
-}
-
-void
-bus_fault_handler(void)
-{
-    REPORT_STACK_FRAME
-    ReportBusFault();
-}
-
-void
-usage_fault_handler(void)
-{
-    REPORT_STACK_FRAME
-    ReportUsageFault();
 }
 
 static void

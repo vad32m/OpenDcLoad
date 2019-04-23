@@ -18,6 +18,7 @@ include ./rtos/Makefile
 
 CFILES = src/main.c \
 	src/fault_handlers/src/fault_handler.c \
+	src/platform/sys_interrupt.c \
 	src/platform/syscalls.c
 
 INCLUDES = $(FREERTOS_INCLUDES) \
@@ -30,10 +31,10 @@ LDSCRIPT = ./tools/stm32f407.ld
 OPENCM3_LIB = opencm3_stm32f4
 LIBDEPS = rtos_lib
 CSTD = --std=c99
-debug: OPENCM3_DEFS = -DSTM32F4 -DDEBUG
-debug: OPT = -Og
+OPENCM3_DEFS = -DSTM32F4
 
-release: OPENCM3_DEFS = -DSTM32F4
+debug: OPENCM3_DEFS += -DDEBUG
+debug: OPT = -Og
 
 debug: binary
 release: binary
