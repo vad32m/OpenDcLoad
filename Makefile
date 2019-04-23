@@ -17,11 +17,12 @@ FREERTOS_ARCH_FLAGS = $(ARCH_FLAGS)
 include ./rtos/Makefile
 
 CFILES = src/main.c \
-	 src/fault_handlers/src/fault_handler.c \
-     src/syscalls.c
+	src/fault_handlers/src/fault_handler.c \
+	src/platform/syscalls.c
 
 INCLUDES = $(FREERTOS_INCLUDES) \
-           -I./src/fault_handlers/inc/
+    -I./src/fault_handlers/inc/ \
+	-I./src/
 
 OPENCM3_DIR = ./libopencm3/
 PROJECT = electronic_load
