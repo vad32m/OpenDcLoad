@@ -9,8 +9,6 @@
 #include "task.h"
 #include "platform/core_setup.h"
 
-#define CONFIG_BUSFAULT_INTERRUPT_PRIORITY 0x1
-
 static void
 gpio_setup(void)
 {
@@ -28,13 +26,13 @@ static void
 task1(void *args __attribute((unused)))
 {
     for (;;) {
-        gpio_toggle(GPIOA,GPIO7);
+        gpio_toggle(GPIOA, GPIO7);
         vTaskDelay(pdMS_TO_TICKS(200));
     }
 }
 
 #define TEST_BUS_FAULT 0
-#define TEST_USAGE_FAULT 1
+#define TEST_USAGE_FAULT 0
 #define TEST_MEMMANAG_FAULT 0
 #define TEST_DIV0_FAULT 0
 #define TEST_OUT_OF_MEMORY 0

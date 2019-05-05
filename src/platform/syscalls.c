@@ -7,14 +7,14 @@
 #include <libopencm3/cm3/itm.h>
 #include <libopencm3/cm3/scb.h>
 
-#include "FreeRTOSConfig.h"
+#include "sys_config.h"
 #include "platform/syscalls.h"
 
 #undef errno
 extern int errno;
 char *__env[1] = {0};
 char **__environ = __env;
-static uint8_t heap_mem[configTOTAL_HEAP_SIZE];
+static uint8_t heap_mem[SYSCONF_HEAP_SIZE];
 uint32_t allocated = 0;
 
 // Function definition.
@@ -64,7 +64,7 @@ caddr_t _sbrk(int incr)
   
   allocated += incr;
 
-  if (allocated >= configTOTAL_HEAP_SIZE)
+  if (allocated >= SYSCONF_HEAP_SIZE)
   {
     errno = ENOMEM;
     allocated -= incr;

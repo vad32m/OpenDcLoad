@@ -1,6 +1,7 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
+#include "sys_config.h"
 /*-----------------------------------------------------------
  * Application specific definitions.
  *
@@ -13,21 +14,16 @@
  * See http://www.freertos.org/a00110.html.
  *----------------------------------------------------------*/
 
-/* Ensure stdint is only used by the compiler, and not the assembler. */
-#ifdef __ICCARM__
-#include <stdint.h>
-#endif
 
 #define configSUPPORT_STATIC_ALLOCATION 0
 
 #define configUSE_PREEMPTION   1
 #define configUSE_IDLE_HOOK    0
 #define configUSE_TICK_HOOK    0
-#define configCPU_CLOCK_HZ    168000000
+#define configCPU_CLOCK_HZ    SYSCONF_CPU_CLOCK
 #define configTICK_RATE_HZ    ( ( TickType_t ) 1000 )
 #define configMAX_PRIORITIES   ( 5 )
 #define configMINIMAL_STACK_SIZE  ( ( unsigned short ) 130 )
-#define configTOTAL_HEAP_SIZE   ( ( size_t ) ( 75 * 1024 ) )
 #define configMAX_TASK_NAME_LEN   ( 10 )
 #define configUSE_TRACE_FACILITY  0
 #define configUSE_16_BIT_TICKS   0
@@ -54,8 +50,8 @@
 
 /* Set the following definitions to 1 to include the API function, or zero
    to exclude the API function. */
-#define INCLUDE_vTaskPrioritySet  1
-#define INCLUDE_uxTaskPriorityGet  1
+#define INCLUDE_vTaskPrioritySet  0
+#define INCLUDE_uxTaskPriorityGet  0
 #define INCLUDE_vTaskDelete    1
 #define INCLUDE_vTaskCleanUpResources 1
 #define INCLUDE_vTaskSuspend   1
@@ -72,13 +68,13 @@
 
 /* The lowest interrupt priority that can be used in a call to a "set priority"
    function. */
-#define configLIBRARY_LOWEST_INTERRUPT_PRIORITY   0xf
+#define configLIBRARY_LOWEST_INTERRUPT_PRIORITY   SYSCONF_LOWEST_INTERRUPT_PRIO
 
 /* The highest interrupt priority that can be used by any interrupt service
    routine that makes calls to interrupt safe FreeRTOS API functions.  DO NOT CALL
    INTERRUPT SAFE FREERTOS API FUNCTIONS FROM ANY INTERRUPT THAT HAS A HIGHER
    PRIORITY THAN THIS! (higher priorities are lower numeric values. */
-#define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY 0x5
+#define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY SYSCONF_RTOS_AWARE_INTERRUPT_MAX_PRIORITY
 
 /* Interrupt priorities used by the kernel port layer itself.  These are generic
    to all Cortex-M ports, and do not rely on any particular library functions. */
