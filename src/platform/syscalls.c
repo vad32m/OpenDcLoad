@@ -1,5 +1,3 @@
-#include "FreeRTOSConfig.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
@@ -9,6 +7,8 @@
 #include <libopencm3/cm3/itm.h>
 #include <libopencm3/cm3/scb.h>
 
+#include "FreeRTOSConfig.h"
+#include "platform/syscalls.h"
 
 #undef errno
 extern int errno;

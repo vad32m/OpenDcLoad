@@ -1,4 +1,3 @@
-#include "platform/syscals.h"
 #include <sys/types.h>
 
 int _read(int file, char *ptr, int len);

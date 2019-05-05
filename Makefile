@@ -18,7 +18,6 @@ include ./rtos/Makefile
 
 CFILES = src/main.c \
 	src/fault_handlers/src/fault_handler.c \
-	src/platform/sys_interrupt.c \
 	src/platform/syscalls.c
 
 INCLUDES = $(FREERTOS_INCLUDES) \

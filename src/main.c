@@ -75,6 +75,7 @@ task1(void *args __attribute((unused)))
         vTaskDelay(pdMS_TO_TICKS(200));
     }
 }
+
 #define MPU_RASR_SIZE_32B (0x04 << MPU_RASR_SIZE_LSB)
 #define MPU_RASR_SIZE_64KB (0x0F << MPU_RASR_SIZE_LSB)
 #define MPU_RASR_SIZE_128KB (0x10 << MPU_RASR_SIZE_LSB)
