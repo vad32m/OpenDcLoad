@@ -16,4 +16,7 @@
 #define FAULT_PRINT_HEX(VAR)         printf("0x%08lX", VAR)
 #define FAULT_NEWLINE()              puts(" ")
 
+#define FAULT_BREAKPOINT
+#define FAULT_REBOOT
+
 #endif /* FAULT_CONFIG_H_ */
