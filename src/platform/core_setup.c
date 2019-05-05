@@ -1,12 +1,12 @@
 #include <libopencm3/cm3/mpu.h>
 #include <libopencm3/cm3/systick.h>
 #include <libopencm3/cm3/nvic.h>
-#include <libopencm3/cm3/itm.h>
 #include <libopencm3/cm3/scb.h>
 
 #include <libopencm3/stm32/rcc.h>
 
 #include "platform/core_setup.h"
+#include "sys_config.h"
 
 #define MPU_RASR_SIZE_32B (0x04 << MPU_RASR_SIZE_LSB)
 #define MPU_RASR_SIZE_64KB (0x0F << MPU_RASR_SIZE_LSB)
@@ -76,7 +76,8 @@ mpu_setup_regions(mpu_region_t *config, uint8_t num_regions)
             MPU_RASR = config[i].permissions | config[i].region_size | MPU_RASR_ENABLE;
         }
 
-		for (uint8_t i = num_regions; i < 8; i++) { // Disabled unused regions
+        // Disabled unused regions
+		for (uint8_t i = num_regions; i < 8; i++) {
 			MPU_RNR = i;
 			MPU_RBAR = 0;
 			MPU_RASR = 0;
@@ -112,18 +113,26 @@ clock_setup(void)
 void
 irq_setup(void)
 {
+    //16 bits for priority, no sub-priorities
     SCB_AIRCR = SCB_AIRCR_VECTKEYSTAT
                     | SCB_AIRCR_PRIGROUP_GROUP16_NOSUB;
 
+    //enable specific fault interrupts
     SCB_SHCSR |= SCB_SHCSR_MEMFAULTENA
                     | SCB_SHCSR_USGFAULTENA
                     | SCB_SHCSR_BUSFAULTENA;
 
     SCB_CCR |= SCB_CCR_DIV_0_TRP;
-    //No need to set priority for systick and pendsv, it is configured by FreeRTOS
+    //No need to config systick and pendsv, they are configured by FreeRTOS
     nvic_enable_irq(NVIC_HARD_FAULT_IRQ);
+
     nvic_enable_irq(NVIC_BUS_FAULT_IRQ);
+    nvic_set_priority(NVIC_BUS_FAULT_IRQ, SYSCONF_FAULT_INTERRUPT_PRIORITY);
+
     nvic_enable_irq(NVIC_MEM_MANAGE_IRQ);
+    nvic_set_priority(NVIC_MEM_MANAGE_IRQ, SYSCONF_FAULT_INTERRUPT_PRIORITY);
+
     nvic_enable_irq(NVIC_USAGE_FAULT_IRQ);
+    nvic_set_priority(NVIC_USAGE_FAULT_IRQ, SYSCONF_FAULT_INTERRUPT_PRIORITY);
 
 }
