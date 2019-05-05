@@ -17,6 +17,6 @@
 #define FAULT_NEWLINE()              puts(" ")
 
 #define FAULT_BREAKPOINT
-#define FAULT_REBOOT
+#define FAULT_STOP
 
 #endif /* FAULT_CONFIG_H_ */
