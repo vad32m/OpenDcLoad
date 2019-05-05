@@ -267,6 +267,8 @@ static void prvPortStartFirstTask( void )
 	__asm volatile(
 					" ldr r0, =0xE000ED08 	\n" /* Use the NVIC offset register to locate the stack. */
 					" ldr r0, [r0] 			\n"
+					" ldr r1, =0x08000000	\n"
+					" add r0, r1			\n"
 					" ldr r0, [r0] 			\n"
 					" msr msp, r0			\n" /* Set the msp back to the start of the stack. */
 					" mov r0, #0			\n" /* Clear the bit that indicates the FPU is in use, see comment above. */

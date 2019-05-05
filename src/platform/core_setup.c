@@ -50,11 +50,6 @@ static mpu_region_t mpu_regions[] = {
     {.start_address = 0x40000000, .region_size = MPU_RASR_SIZE_32MB,
     .permissions = MPU_RASR_ATTR_AP_PRW_URW | MPU_RASR_ATTR_XN | MPU_RASR_ATTR_B | MPU_RASR_ATTR_S },
     /**
-     * 0x0000 0000 - RO (FREERTOS fetches initial stack pointer from this address)
-     */
-    {.start_address = 0x00000000, .region_size = MPU_RASR_SIZE_32B,
-    .permissions = MPU_RASR_ATTR_AP_PRO_UNO | MPU_RASR_ATTR_XN | MPU_RASR_ATTR_B | MPU_RASR_ATTR_S },
-    /**
 	 * 0x1000 0000 - 64k CCM RAM RW region
 	 */
     {.start_address = 0x10000000, .region_size = MPU_RASR_SIZE_64KB,

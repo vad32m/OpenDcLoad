@@ -31,6 +31,7 @@ task1(void *args __attribute((unused)))
     }
 }
 
+#define TEST_NULL_DEREF 0
 #define TEST_BUS_FAULT 0
 #define TEST_USAGE_FAULT 0
 #define TEST_MEMMANAG_FAULT 0
@@ -64,6 +65,10 @@ main(void)
         }
     }
 #endif
+    #if TEST_NULL_DEREF
+    volatile int* null_ptr = 0;
+    volatile int a = *null_ptr;
+    #endif
 
     #if TEST_BUS_FAULT
     //trigger precise bus fault by accessing memory behind the end of the RAM
