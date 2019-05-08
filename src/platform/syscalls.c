@@ -24,9 +24,9 @@ int _write(int file, char *data, unsigned int len)
 {
   for (uint16_t i = 0u; i < len; i++)
   {
-      while (!(ITM_STIM8(0) & ITM_STIM_FIFOREADY)) {}
+      while (!(ITM_STIM8(0) & ITM_STIM_FIFOREADY)){}
 
-	    ITM_STIM8(0) = data[i];
+      ITM_STIM8(0) = data[i];
   }
 
   return len;

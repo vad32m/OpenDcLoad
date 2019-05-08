@@ -26,10 +26,11 @@ gpio_setup(void)
 static void
 task1(void *args __attribute((unused)))
 {
+	int i = 0;
     for (;;) {
         gpio_toggle(GPIOA, GPIO7);
         vTaskDelay(pdMS_TO_TICKS(200));
-        LOG_ERR("test %d", 10);
+        LOG_ERR("test %d", i++);
     }
 }
 
@@ -48,6 +49,7 @@ main(void)
     systick_setup();
     gpio_setup();
     irq_setup();
+    logger_init();
 #if !TEST_BUS_FAULT
     mpu_setup();
 #endif
