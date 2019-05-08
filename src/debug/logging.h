@@ -15,19 +15,7 @@
  * Highly configurable module for writing debug output to the ITM trace
  * @{
  */
-/**
- * @brief Priority for logger task, used when thread is created
-*/
-#define LOGGER_TASK_PRIORITY 0
-/**
- * @brief Logger task stack size
- */
-#define LOGGER_TASK_STACK_SIZE 128
-/**
- * @brief Defines number of ticks, on which logger thread should sleep,
- * if no messages in buffer available
- */
-#define LOGGER_NO_MESSAGE_DELAY 10
+
 /**
  * @brief Defines maximum number of characters(including null terminator)
  * that may be put with debug in single line
@@ -36,7 +24,7 @@
 /**
  * @brief Defines maximum number of messages, stored in loggers buffer
  */
-#define LOGGER_MESSAGE_CAPACITY 20
+#define LOGGER_BUFFER_MESSAGE_CAPACITY 5
 
 /**
  * @brief No logs will be printed

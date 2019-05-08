@@ -8,6 +8,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "platform/core_setup.h"
+#include "debug/logging.h"
 
 static void
 gpio_setup(void)
@@ -28,6 +29,7 @@ task1(void *args __attribute((unused)))
     for (;;) {
         gpio_toggle(GPIOA, GPIO7);
         vTaskDelay(pdMS_TO_TICKS(200));
+        LOG_ERR("test %d", 10);
     }
 }
 
