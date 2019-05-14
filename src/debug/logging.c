@@ -14,7 +14,7 @@
 struct log_buffer_t
 {
     bool is_finished;
-    char buffer[LOGGER_MESSAGE_MAX_LEN];
+    char buffer[LOGGER_MESSAGE_MAX_LEN + 1];
     uint8_t print_pos;
 };
 
@@ -94,20 +94,23 @@ int32_t logger_start_message(void)
 void logger_put_string(int32_t message_handler, const char *string)
 {
     //TODO: advanced checking (keep length of the string in buffer)
-    strncat(buffers[message_handler].buffer, string, LOGGER_MESSAGE_MAX_LEN);
+    strncat(buffers[message_handler].buffer, string, LOGGER_MESSAGE_MAX_LEN - strlen(buffers[message_handler].buffer));
 }
 
 void logger_printf(int32_t message_handler, const char *format, ...)
 {
+    size_t length = strlen(buffers[message_handler].buffer);
     va_list myargs;
+
     va_start(myargs, format);
-    vsprintf(buffers[message_handler].buffer + strlen(buffers[message_handler].buffer), format, myargs);
+    vsnprintf(buffers[message_handler].buffer + length, LOGGER_MESSAGE_MAX_LEN - length, format, myargs);
     va_end(myargs);
 }
 
 void logger_put_decimal(int32_t message_handler, uint32_t number)
 {
-    sprintf(buffers[message_handler].buffer + strlen(buffers[message_handler].buffer), "%d", number);
+	size_t length = strlen(buffers[message_handler].buffer);
+    snprintf(buffers[message_handler].buffer + length, LOGGER_MESSAGE_MAX_LEN - length, "%lu", number);
 }
 
 void logger_end_message(int32_t message_handler)
@@ -115,8 +118,14 @@ void logger_end_message(int32_t message_handler)
     buffers[message_handler].is_finished = true;
 }
 
-void logger_print_byte_array(int32_t message_handler, void *memory, uint32_t _array_size)
+void logger_print_byte_array(int32_t message_handler, void *memory, uint32_t array_size)
 {
-    //TODO: print buffer
-
+    size_t length = strlen(buffers[message_handler].buffer);
+    uint8_t *bytes = memory;
+    
+    for (uint32_t array_index = 0; array_index < array_size; array_index++)
+    {
+        snprintf(buffers[message_handler].buffer + length, LOGGER_MESSAGE_MAX_LEN - length, " %02X", bytes[array_index]);
+        length += 3;
+    }
 }

@@ -97,7 +97,7 @@
 #define LOG_BYTE_ARRAY(LEVEL, POINTER, SIZE) {\
     int32_t log_handler = logger_start_message();\
     if (log_handler >= 0) {\
-        logger_put_string(log_handler, LOG_LEVEL_STR(LEVEL) LOG_FILE_STR(__FILE__) LOG_LINE_STR(__LINE__))\
+        logger_put_string(log_handler, LOG_LEVEL_STR(LEVEL) LOG_FILE_STR(__FILE__) LOG_LINE_STR(__LINE__));\
         logger_print_byte_array(log_handler, POINTER, SIZE);\
         logger_end_message(log_handler);\
     }}
