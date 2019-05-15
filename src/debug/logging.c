@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include "debug/logging.h"
+#include "sys_config.h"
 
 struct log_buffer_t
 {
@@ -20,8 +21,8 @@ struct log_buffer_t
 
 static struct log_buffer_t buffers[LOGGER_BUFFER_MESSAGE_CAPACITY];
 
-static _Atomic int32_t write_head;
-static int32_t read_tail;
+static volatile _Atomic int32_t write_head;
+static volatile int32_t read_tail;
 
 static void logging_print_data(void) {
 	if ((read_tail != write_head)
@@ -58,6 +59,7 @@ void logger_init(void)
     timer_enable_irq(TIM4, TIM_DIER_UIE);
 
     nvic_enable_irq(NVIC_TIM4_IRQ);
+    nvic_set_priority(NVIC_TIM4_IRQ, SYSCONF_LOGGER_INTERRUPT_PRIORITY);
 }
 
 void tim4_isr(void)
