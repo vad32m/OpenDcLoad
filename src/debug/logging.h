@@ -166,7 +166,7 @@ void logger_printf(int32_t message_handler, const char *format, ...);
 void logger_put_decimal(int32_t message_handler, uint32_t number);
 void logger_end_message(int32_t message_handler);
 void logger_print_byte_array(int32_t message_handler, void *memory, uint32_t _array_size);
-
+void logger_flush(int32_t message_handler);
 
 #endif
 

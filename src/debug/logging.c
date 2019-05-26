@@ -120,6 +120,11 @@ void logger_end_message(int32_t message_handler)
     buffers[message_handler].is_finished = true;
 }
 
+void logger_flush(int32_t message_handler)
+{
+    while (buffers[message_handler].is_finished != false) {};
+}
+
 void logger_print_byte_array(int32_t message_handler, void *memory, uint32_t array_size)
 {
     size_t length = strlen(buffers[message_handler].buffer);
