@@ -20,6 +20,7 @@ CFILES = src/main.c \
 	src/fault_handlers/fault_handler.c \
 	src/platform/core_setup.c \
 	src/platform/syscalls.c \
+	src/platform/lcd_connection.c \
 	src/debug/logging.c \
 	src/debug/assertions.c
 

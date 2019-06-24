@@ -11,6 +11,7 @@
 #define MPU_RASR_SIZE_32B (0x04 << MPU_RASR_SIZE_LSB)
 #define MPU_RASR_SIZE_64KB (0x0F << MPU_RASR_SIZE_LSB)
 #define MPU_RASR_SIZE_128KB (0x10 << MPU_RASR_SIZE_LSB)
+#define MPU_RASR_SIZE_256KB (0x11 << MPU_RASR_SIZE_LSB)
 #define MPU_RASR_SIZE_512KB (0x12 << MPU_RASR_SIZE_LSB)
 #define MPU_RASR_SIZE_1MB (0x13 << MPU_RASR_SIZE_LSB)
 #define MPU_RASR_SIZE_32MB (0x18 << MPU_RASR_SIZE_LSB)
@@ -53,7 +54,12 @@ static mpu_region_t mpu_regions[] = {
 	 * 0x1000 0000 - 64k CCM RAM RW region
 	 */
     {.start_address = 0x10000000, .region_size = MPU_RASR_SIZE_64KB,
-    .permissions = MPU_RASR_ATTR_AP_PRW_URW | MPU_RASR_ATTR_XN | MPU_RASR_ATTR_C | MPU_RASR_ATTR_S }
+    .permissions = MPU_RASR_ATTR_AP_PRW_URW | MPU_RASR_ATTR_XN | MPU_RASR_ATTR_C | MPU_RASR_ATTR_S },
+	/**
+	 * 0x60040000 - 0x60040000 - FSMC
+	 */
+    {.start_address = 0x60000000, .region_size = MPU_RASR_SIZE_512KB,
+     .permissions = MPU_RASR_ATTR_AP_PRW_URW | MPU_RASR_ATTR_XN}
     /**
      * 0xA000 0000 32Mb RW - Peripheral (AHB3??
      */
