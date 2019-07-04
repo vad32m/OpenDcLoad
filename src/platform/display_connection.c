@@ -39,7 +39,7 @@ gpio_ports_init()
 }
 
 int32_t
-lcd_connection_init(void)
+display_connection_init(void)
 {
 	rcc_periph_clock_enable(RCC_FSMC);
     fsmc_init();
@@ -51,25 +51,25 @@ lcd_connection_init(void)
 #define LCD_REG  0x60000000
 
 void
-lcd_connection_write_cmd(uint8_t cmd)
+display_connection_write_cmd(uint8_t cmd)
 {
     *(uint8_t*) (LCD_REG) = cmd;
 }
 
 void
-lcd_connection_write_data(uint8_t data)
+display_connection_write_data(uint8_t data)
 {
     *(uint8_t*) (LCD_DATA) = data;
 }
 
 void
-lcd_connection_write_data_16(uint16_t data)
+display_connection_write_data_16(uint16_t data)
 {
     *(uint16_t*) (LCD_DATA) = data;
 }
 
 uint8_t
-lcd_connection_read_data(void)
+display_connection_read_data(void)
 {
 	uint8_t result = *(uint8_t*) (LCD_DATA);
     return result;
