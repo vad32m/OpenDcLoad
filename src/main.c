@@ -9,6 +9,9 @@
 #include "task.h"
 #include "platform/core_setup.h"
 #include "debug/logging.h"
+#include "debug/assertions.h"
+#include "driver/ili9486/display_driver.h"
+#include "platform/display_connection.h"
 
 static void
 gpio_setup(void)
@@ -26,12 +29,21 @@ gpio_setup(void)
 static void
 task1(void *args __attribute((unused)))
 {
-	int i = 0;
+    struct display_driver display;
+    uint16_t color = 1;
+    display_init(&display, displayOrientationHorizontal);
+	display_clear(&display, 0xFFFF);
     for (;;) {
+        color = color << 1;
+        if (!color)
+        {
+            color = 1;
+        }
+        display_clear(&display, color);
         gpio_toggle(GPIOA, GPIO7);
-        vTaskDelay(pdMS_TO_TICKS(200));
-        LOG_ERR("test %d", i++);
+        vTaskDelay(pdMS_TO_TICKS(400));
     }
+
 }
 
 #define TEST_NULL_DEREF 0
@@ -50,6 +62,9 @@ main(void)
     gpio_setup();
     irq_setup();
     logger_init();
+    display_connection_init();
+
+
 #if !TEST_BUS_FAULT
     mpu_setup();
 #endif
@@ -69,31 +84,33 @@ main(void)
         }
     }
 #endif
-    #if TEST_NULL_DEREF
+
+
+#if TEST_NULL_DEREF
     volatile int* null_ptr = 0;
     volatile int a = *null_ptr;
-    #endif
+#endif
 
-    #if TEST_BUS_FAULT
+#if TEST_BUS_FAULT
     //trigger precise bus fault by accessing memory behind the end of the RAM
     extern int _stack;
     int* behind_the_end = &_stack + 4;
     volatile int a = *behind_the_end;
-    #endif
+#endif
 
-    #if TEST_USAGE_FAULT
+#if TEST_USAGE_FAULT
     __asm volatile("udf.w");
-    #endif
+#endif
 
-    #if TEST_MEMMANAG_FAULT
+#if TEST_MEMMANAG_FAULT
     void (*exec_never_region)(void) = 0x40000000;
     exec_never_region();
-    #endif
+#endif
 
-    #if TEST_DIV0_FAULT
+#if TEST_DIV0_FAULT
     int a = 0;
     volatile int b = 10/a;
-    #endif
+#endif
 
     xTaskCreate(task1, "LED", 100, NULL, configMAX_PRIORITIES - 1, NULL);
     vTaskStartScheduler();

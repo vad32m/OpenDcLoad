@@ -20,9 +20,10 @@ CFILES = src/main.c \
 	src/fault_handlers/fault_handler.c \
 	src/platform/core_setup.c \
 	src/platform/syscalls.c \
-	src/platform/lcd_connection.c \
+	src/platform/display_connection.c \
 	src/debug/logging.c \
-	src/debug/assertions.c
+	src/debug/assertions.c \
+	src/driver/ili9486/display_driver.c
 
 INCLUDES = $(FREERTOS_INCLUDES) \
     -I./src/fault_handlers/inc/ \
