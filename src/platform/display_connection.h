@@ -18,4 +18,10 @@ display_connection_write_data_16(uint16_t data);
 uint8_t
 display_connection_read_data(void);
 
+void
+display_connection_duplicate_data(uint16_t number, uint32_t repetitions);
+
+void
+display_connection_write_data_bulk(uint16_t* data, uint32_t data_count);
+
 #endif //__LCD_CONNECTION__
