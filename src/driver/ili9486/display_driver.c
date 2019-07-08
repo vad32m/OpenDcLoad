@@ -135,8 +135,5 @@ display_clear(struct display_driver* display, uint16_t color)
 {
     display_set_window(0, 0, 479, 319);
     display_write_ram_prepare();
-
-    for (uint32_t i = 0; i < 320 * 480; i++) {
-        display_connection_write_data_16(color);
-    }
+    display_connection_duplicate_data(color, 320 * 480);
 }

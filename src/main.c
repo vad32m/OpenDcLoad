@@ -32,8 +32,9 @@ task1(void *args __attribute((unused)))
     struct display_driver display;
     uint16_t color = 1;
     display_init(&display, displayOrientationHorizontal);
-	display_clear(&display, 0xFFFF);
+	display_clear(&display, 0x0220);
     for (;;) {
+        vTaskDelay(pdMS_TO_TICKS(400));
         color = color << 1;
         if (!color)
         {
@@ -41,7 +42,6 @@ task1(void *args __attribute((unused)))
         }
         display_clear(&display, color);
         gpio_toggle(GPIOA, GPIO7);
-        vTaskDelay(pdMS_TO_TICKS(400));
     }
 
 }
