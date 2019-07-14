@@ -165,7 +165,6 @@ task1(void *args __attribute((unused)))
             color = 1;
         }
         display_clear(&display, color);
-        vTaskDelay(pdMS_TO_TICKS(100));
         struct display_area axes_are = {.xStart = 20, .yStart = 40, .xEnd = 140, .yEnd = 160};
         display_write_image(&axes_are, axes_image);
         gpio_toggle(GPIOA, GPIO7);

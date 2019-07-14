@@ -25,6 +25,7 @@ static struct {
     uint16_t* pending_address;
     uint32_t data_left;
     bool data_increment;
+    bool in_progress;
 } dma_ongoing_transaction;
 
 static int32_t
@@ -32,7 +33,7 @@ fsmc_init()
 {
 	rcc_periph_clock_enable(RCC_FSMC);
     FSMC_BCR1 = FSMC_BCR_WREN | FSMC_BCR_MBKEN | FSMC_BCR_MTYP_NOR | FSMC_BCR_FACCEN | FSMC_BCR_MUXEN;
-    FSMC_BTR1 = FSMC_BTR_BUSTURNx(4) | FSMC_BTR_DATASTx(4) | FSMC_BTR_ADDSETx(4);
+    FSMC_BTR1 = FSMC_BTR_BUSTURNx(2) | FSMC_BTR_DATASTx(3) | FSMC_BTR_ADDSETx(3);
     return 0;
 }
 
@@ -82,6 +83,8 @@ void dma2_stream0_isr(void)
                 dma_disable_peripheral_increment_mode(DMA2, DMA_STREAM0);
             }
             dma_enable_stream(DMA2, DMA_STREAM0);
+        } else {
+            dma_ongoing_transaction.in_progress = false;
         }
     }
 
@@ -109,13 +112,13 @@ void
 display_connection_duplicate_data(uint16_t number, uint32_t repetitions)
 {
     static uint16_t data;
-    data = number;
     
-    dma_disable_stream(DMA2, DMA_STREAM0);
+    while (dma_ongoing_transaction.in_progress) {}
+    dma_ongoing_transaction.in_progress = true;
 
-    if (dma_get_interrupt_flag(DMA2, DMA_STREAM0, DMA_TCIF)) {
-        dma_clear_interrupt_flags(DMA2, DMA_STREAM0, DMA_TCIF);
-    }
+    data = number;
+
+    dma_disable_stream(DMA2, DMA_STREAM0);
 
     if (repetitions > DMA_TRANSACTION_MAX_ITEMS) {
         dma_ongoing_transaction.data_left = repetitions - DMA_TRANSACTION_MAX_ITEMS;
@@ -137,6 +140,10 @@ display_connection_duplicate_data(uint16_t number, uint32_t repetitions)
 void
 display_connection_write_data_bulk(uint16_t* data, uint32_t data_count)
 {
+
+    while (dma_ongoing_transaction.in_progress) {}
+    dma_ongoing_transaction.in_progress = true;
+
     dma_disable_stream(DMA2, DMA_STREAM0);
 
     if (dma_get_interrupt_flag(DMA2, DMA_STREAM0, DMA_TCIF)) {
@@ -172,24 +179,28 @@ display_connection_init(void)
 void
 display_connection_write_cmd(uint8_t cmd)
 {
+    while (dma_ongoing_transaction.in_progress) {}
     *(volatile uint8_t*) (LCD_REG) = cmd;
 }
 
 void
 display_connection_write_data(uint8_t data)
 {
+    while (dma_ongoing_transaction.in_progress) {}
     *(volatile uint8_t*) (LCD_DATA) = data;
 }
 
 void
 display_connection_write_data_16(uint16_t data)
 {
+    while (dma_ongoing_transaction.in_progress) {}
     *(volatile uint16_t*) (LCD_DATA) = data;
 }
 
 uint8_t
 display_connection_read_data(void)
 {
+    while (dma_ongoing_transaction.in_progress) {}
 	uint8_t result = *(volatile uint8_t*) (LCD_DATA);
     return result;
 }
