@@ -16,7 +16,13 @@ FREERTOS_ARCH_FLAGS = $(ARCH_FLAGS)
 
 include ./rtos/Makefile
 
-CFILES = src/main.c \
+
+LVGL_DIR = ./src/ui
+
+include ./src/ui/lvgl/lvgl.mk
+
+CFILES += $(CSRCS)
+CFILES += src/main.c \
 	src/fault_handlers/fault_handler.c \
 	src/platform/core_setup.c \
 	src/platform/syscalls.c \
@@ -27,6 +33,7 @@ CFILES = src/main.c \
 
 INCLUDES = $(FREERTOS_INCLUDES) \
     -I./src/fault_handlers/inc/ \
+	-I./src/ui/lvgl/ \
 	-I./src/
 
 OPENCM3_DIR = ./libopencm3/

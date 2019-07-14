@@ -4,3 +4,6 @@
 [submodule "src/fault_handlers"]
 	path = src/fault_handlers
 	url = git@github.com:vad32m/arm-hard-fault-handler.git
+[submodule "src/ui/lvgl"]
+	path = src/ui/lvgl
+	url = https://github.com/littlevgl/lvgl.git
