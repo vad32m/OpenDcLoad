@@ -32,7 +32,7 @@ fsmc_init()
 {
 	rcc_periph_clock_enable(RCC_FSMC);
     FSMC_BCR1 = FSMC_BCR_WREN | FSMC_BCR_MBKEN | FSMC_BCR_MTYP_NOR | FSMC_BCR_FACCEN | FSMC_BCR_MUXEN;
-    FSMC_BTR1 = FSMC_BTR_BUSTURNx(2) | FSMC_BTR_DATASTx(2) | FSMC_BTR_ADDSETx(2);
+    FSMC_BTR1 = FSMC_BTR_BUSTURNx(4) | FSMC_BTR_DATASTx(4) | FSMC_BTR_ADDSETx(4);
     return 0;
 }
 
@@ -172,24 +172,24 @@ display_connection_init(void)
 void
 display_connection_write_cmd(uint8_t cmd)
 {
-    *(uint8_t*) (LCD_REG) = cmd;
+    *(volatile uint8_t*) (LCD_REG) = cmd;
 }
 
 void
 display_connection_write_data(uint8_t data)
 {
-    *(uint8_t*) (LCD_DATA) = data;
+    *(volatile uint8_t*) (LCD_DATA) = data;
 }
 
 void
 display_connection_write_data_16(uint16_t data)
 {
-    *(uint16_t*) (LCD_DATA) = data;
+    *(volatile uint16_t*) (LCD_DATA) = data;
 }
 
 uint8_t
 display_connection_read_data(void)
 {
-	uint8_t result = *(uint8_t*) (LCD_DATA);
+	uint8_t result = *(volatile uint8_t*) (LCD_DATA);
     return result;
 }

@@ -15,6 +15,7 @@
 #define DISPLAY_HEIGHT 320
 
 #define MEMORY_ACCESS_CTL_REG 0x36
+#define MEMORY_ACCESS_CTL_MY (1 << 7)
 #define MEMORY_ACCESS_CTL_MX (1 << 6)
 #define MEMORY_ACCESS_CTL_MV (1 << 5)
 #define MEMORY_ACCESS_CTL_ML (1 << 4)
@@ -30,6 +31,10 @@
 #define DISPLAY_ON_REG 0x29
 
 #define INTERFACE_PIXEL_FORMAT_REG 0x3A
+
+#define COLUMN_ADRESS_SET 0x2A
+#define PAGE_ADRESS_SET 0x2B
+#define MEMORY_WRITE_CMD 0x2C
 
 typedef struct
 {
@@ -86,19 +91,29 @@ display_init(struct display_driver* driver, enum display_orientation orient)
     display_cmd_seq_write(setup_sequence, sizeof(setup_sequence)/sizeof(setup_sequence[0]));
 
     switch (orient) {
-    case displayOrientationHorizontal:
-        driver->width = DISPLAY_WIDTH;
-        driver->height = DISPLAY_HEIGHT;
-        //0 degree MY=0,MX=0,MV=0,ML=0,BGR=1,MH=0
-        display_connection_write_cmd(MEMORY_ACCESS_CTL_REG);
-        display_connection_write_data(MEMORY_ACCESS_CTL_MX | MEMORY_ACCESS_CTL_BGR);
-        break;
     case displayOrientationVertical:
         driver->width = DISPLAY_WIDTH;
         driver->height = DISPLAY_HEIGHT;
-        //90 degree MY=0,MX=1,MV=1,ML=1,BGR=1,MH=0
+        display_connection_write_cmd(MEMORY_ACCESS_CTL_REG);
+        display_connection_write_data(MEMORY_ACCESS_CTL_MX | MEMORY_ACCESS_CTL_BGR);
+        break;
+    case displayOrientationHorizontal:
+        driver->width = DISPLAY_HEIGHT;
+        driver->height = DISPLAY_WIDTH;
         display_connection_write_cmd(MEMORY_ACCESS_CTL_REG);
         display_connection_write_data(MEMORY_ACCESS_CTL_ML | MEMORY_ACCESS_CTL_MV | MEMORY_ACCESS_CTL_BGR);
+        break;
+    case displayOrientationVerticalFlipped:
+        driver->width = DISPLAY_WIDTH;
+        driver->height = DISPLAY_HEIGHT;
+        display_connection_write_cmd(MEMORY_ACCESS_CTL_REG);
+        display_connection_write_data(MEMORY_ACCESS_CTL_MY | MEMORY_ACCESS_CTL_BGR);
+        break;
+    case displayOrientationHorizontalFlipped:
+        driver->width = DISPLAY_HEIGHT;
+        driver->height = DISPLAY_WIDTH;
+        display_connection_write_cmd(MEMORY_ACCESS_CTL_REG);
+        display_connection_write_data(MEMORY_ACCESS_CTL_MX | MEMORY_ACCESS_CTL_MY | MEMORY_ACCESS_CTL_MV | MEMORY_ACCESS_CTL_BGR);
         break;
     default:
         break;
@@ -109,31 +124,50 @@ display_init(struct display_driver* driver, enum display_orientation orient)
 }
 
 void
-display_set_window(uint16_t xStar, uint16_t yStar,uint16_t xEnd,uint16_t yEnd)
+display_set_window(uint16_t xStart, uint16_t yStart,uint16_t xEnd,uint16_t yEnd)
 {
-    display_connection_write_cmd(0x2A);
-    display_connection_write_data(xStar>>8);
-    display_connection_write_data(0x00FF&xStar);
-    display_connection_write_data(xEnd>>8);
-    display_connection_write_data(0x00FF&xEnd);
+    display_connection_write_cmd(COLUMN_ADRESS_SET);
+    display_connection_write_data(xStart >> 8);
+    display_connection_write_data(0x00FF & xStart);
+    display_connection_write_data(xEnd >> 8);
+    display_connection_write_data(0x00FF & xEnd);
 
-    display_connection_write_cmd(0x2B);
-    display_connection_write_data(yStar>>8);
-    display_connection_write_data(0x00FF&yStar);
-    display_connection_write_data(yEnd>>8);
+    display_connection_write_cmd(PAGE_ADRESS_SET);
+    display_connection_write_data(yStart >> 8);
+    display_connection_write_data(0x00FF & yStart);
+    display_connection_write_data(yEnd >> 8);
+    display_connection_write_data(0x00FF & yEnd);
 }
 
 static void
 display_write_ram_prepare(void)
 {
-    display_connection_write_cmd(0x2C);
+    display_connection_write_cmd(MEMORY_WRITE_CMD);
 }
 
 
 void
 display_clear(struct display_driver* display, uint16_t color)
 {
-    display_set_window(0, 0, 479, 319);
+    display_set_window(0, 0, display->height - 1, display->width - 1);
     display_write_ram_prepare();
     display_connection_duplicate_data(color, 320 * 480);
+}
+
+void
+display_fill_area(const struct display_area* area, uint16_t color)
+{
+    uint32_t number_of_pixels = (area->xEnd - area->xStart) * (area->yEnd - area->yStart);
+    display_set_window(area->xStart, area->yStart, area->xEnd - 1, area->yEnd - 1);
+    display_write_ram_prepare();
+    display_connection_duplicate_data(color, number_of_pixels);
+}
+
+void
+display_write_image(const struct display_area* area, const uint16_t* image)
+{
+    uint32_t number_of_pixels = (area->xEnd - area->xStart) * (area->yEnd - area->yStart);
+    display_set_window(area->xStart, area->yStart, area->xEnd - 1, area->yEnd - 1);
+    display_write_ram_prepare();
+    display_connection_write_data_bulk(image, number_of_pixels);
 }
