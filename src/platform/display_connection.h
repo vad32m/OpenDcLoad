@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+typedef void (*xfer_completed_cb)(void);
+
 int32_t
 display_connection_init(void);
 
@@ -19,9 +21,9 @@ uint8_t
 display_connection_read_data(void);
 
 void
-display_connection_duplicate_data(uint16_t number, uint32_t repetitions);
+display_connection_duplicate_data(uint16_t number, uint32_t repetitions, xfer_completed_cb callback);
 
 void
-display_connection_write_data_bulk(uint16_t* data, uint32_t data_count);
+display_connection_write_data_bulk(uint16_t* data, uint32_t data_count, xfer_completed_cb callback);
 
 #endif //__LCD_CONNECTION__

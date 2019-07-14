@@ -7,6 +7,8 @@
 #include <libopencm3/stm32/dma.h>
 #include <libopencm3/stm32/f4/nvic.h>
 
+#include "display_connection.h"
+
 #define LOG_LEVEL LL_DEBUG
 #define LOG_DISPLAY_FILE 0
 #define LOG_DISPLAY_LINE 0
@@ -26,6 +28,7 @@ static struct {
     uint32_t data_left;
     bool data_increment;
     bool in_progress;
+    xfer_completed_cb xfer_completed;
 } dma_ongoing_transaction;
 
 static int32_t
@@ -84,6 +87,12 @@ void dma2_stream0_isr(void)
             }
             dma_enable_stream(DMA2, DMA_STREAM0);
         } else {
+
+            //callback can be null
+            if (dma_ongoing_transaction.xfer_completed) {
+                dma_ongoing_transaction.xfer_completed();
+            }
+
             dma_ongoing_transaction.in_progress = false;
         }
     }
@@ -109,16 +118,16 @@ dma_init()
 }
 
 void
-display_connection_duplicate_data(uint16_t number, uint32_t repetitions)
+display_connection_duplicate_data(uint16_t number, uint32_t repetitions, xfer_completed_cb callback)
 {
     static uint16_t data;
     
     while (dma_ongoing_transaction.in_progress) {}
     dma_ongoing_transaction.in_progress = true;
 
-    data = number;
-
     dma_disable_stream(DMA2, DMA_STREAM0);
+    data = number;
+    dma_ongoing_transaction.xfer_completed = callback;
 
     if (repetitions > DMA_TRANSACTION_MAX_ITEMS) {
         dma_ongoing_transaction.data_left = repetitions - DMA_TRANSACTION_MAX_ITEMS;
@@ -138,17 +147,14 @@ display_connection_duplicate_data(uint16_t number, uint32_t repetitions)
 }
 
 void
-display_connection_write_data_bulk(uint16_t* data, uint32_t data_count)
+display_connection_write_data_bulk(uint16_t* data, uint32_t data_count, xfer_completed_cb callback)
 {
 
     while (dma_ongoing_transaction.in_progress) {}
     dma_ongoing_transaction.in_progress = true;
 
     dma_disable_stream(DMA2, DMA_STREAM0);
-
-    if (dma_get_interrupt_flag(DMA2, DMA_STREAM0, DMA_TCIF)) {
-        dma_clear_interrupt_flags(DMA2, DMA_STREAM0, DMA_TCIF);
-    }
+    dma_ongoing_transaction.xfer_completed = callback;
 
     if (data_count > DMA_TRANSACTION_MAX_ITEMS) {
         dma_ongoing_transaction.data_left = data_count - DMA_TRANSACTION_MAX_ITEMS;

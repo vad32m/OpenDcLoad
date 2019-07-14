@@ -166,7 +166,12 @@ task1(void *args __attribute((unused)))
         }
         display_clear(&display, color);
         struct display_area axes_are = {.xStart = 20, .yStart = 40, .xEnd = 140, .yEnd = 160};
-        display_write_image(&axes_are, axes_image);
+        display_write_image(&display, &axes_are, axes_image);
+        axes_are.xStart += 120;
+        axes_are.yStart += 120;
+        axes_are.xEnd += 120;
+        axes_are.yEnd += 120;
+        display_fill_area(&display, &axes_are, 0x2020);
         gpio_toggle(GPIOA, GPIO7);
     }
 

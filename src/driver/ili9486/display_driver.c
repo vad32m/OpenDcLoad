@@ -84,6 +84,14 @@ display_cmd_seq_write(const reg_write_cmd* commands, uint32_t commands_num)
     }
 }
 
+void
+display_set_callback(struct display_driver* driver, display_not_busy_cb callback)
+{
+    driver->not_busy_cb = callback;
+}
+
+
+
 int32_t
 display_init(struct display_driver* driver, enum display_orientation orient)
 {
@@ -119,6 +127,7 @@ display_init(struct display_driver* driver, enum display_orientation orient)
         break;
     }
 
+    driver->not_busy_cb = NULL;
     display_connection_write_cmd(DISPLAY_ON_REG);
     return 0;
 }
@@ -151,23 +160,23 @@ display_clear(struct display_driver* display, uint16_t color)
 {
     display_set_window(0, 0, display->height - 1, display->width - 1);
     display_write_ram_prepare();
-    display_connection_duplicate_data(color, 320 * 480);
+    display_connection_duplicate_data(color, 320 * 480, NULL);
 }
 
 void
-display_fill_area(const struct display_area* area, uint16_t color)
+display_fill_area(struct display_driver* display, const struct display_area* area, uint16_t color)
 {
     uint32_t number_of_pixels = (area->xEnd - area->xStart) * (area->yEnd - area->yStart);
     display_set_window(area->xStart, area->yStart, area->xEnd - 1, area->yEnd - 1);
     display_write_ram_prepare();
-    display_connection_duplicate_data(color, number_of_pixels);
+    display_connection_duplicate_data(color, number_of_pixels, display->not_busy_cb);
 }
 
 void
-display_write_image(const struct display_area* area, const uint16_t* image)
+display_write_image(struct display_driver* display, const struct display_area* area, const uint16_t* image)
 {
     uint32_t number_of_pixels = (area->xEnd - area->xStart) * (area->yEnd - area->yStart);
     display_set_window(area->xStart, area->yStart, area->xEnd - 1, area->yEnd - 1);
     display_write_ram_prepare();
-    display_connection_write_data_bulk(image, number_of_pixels);
+    display_connection_write_data_bulk(image, number_of_pixels, display->not_busy_cb);
 }
