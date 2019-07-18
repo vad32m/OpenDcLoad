@@ -8,6 +8,7 @@
 #include <libopencm3/cm3/scb.h>
 
 #include "sys_config.h"
+#include "debug/assertions.h"
 #include "platform/syscalls.h"
 
 #undef errno
@@ -68,6 +69,7 @@ caddr_t _sbrk(int incr)
   {
     errno = ENOMEM;
     allocated -= incr;
+    ASSERT_TRUE(false);
     return (void *)(-1);
   }
 

@@ -1,7 +1,7 @@
 #ifndef SYS_CONFIG__
 #define SYS_CONFIG__
 
-#define SYSCONF_HEAP_SIZE ((size_t) (75 * 1024))
+#define SYSCONF_HEAP_SIZE ((size_t) (64 * 1024))
 
 #define SYSCONF_CPU_CLOCK (168000000)
 

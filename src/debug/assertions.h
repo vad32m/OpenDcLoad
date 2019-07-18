@@ -16,9 +16,9 @@ _assert_die(const char* file, const char* line);
 
 #define ASSERT_PTR_VALID(PTR) if (!(_assert_is_ptr_valid(PTR))) {_assert_die(__FILE__, ASSERT_STR(__LINE__));}
 
-#define ASSERT_NULL(NUMBER)  if ((NUMBER) != 0) {_assert_die(__FILE__, __LINE__);}
+#define ASSERT_NULL(NUMBER)  if ((NUMBER) != 0) {_assert_die(__FILE__, ASSERT_STR(__LINE__));}
 
-#define ASSERT_TRUE(EXPRESSION) if (!(EXPRESSION)) {_assert_die(__FILE__, __LINE__);}
+#define ASSERT_TRUE(EXPRESSION) if (!(EXPRESSION)) {_assert_die(__FILE__, ASSERT_STR(__LINE__));}
 
 #else //DEBUG
 
