@@ -7,6 +7,7 @@
 
 #include "platform/core_setup.h"
 #include "sys_config.h"
+#include "lvgl.h"
 
 #define MPU_RASR_SIZE_32B (0x04 << MPU_RASR_SIZE_LSB)
 #define MPU_RASR_SIZE_64KB (0x0F << MPU_RASR_SIZE_LSB)
@@ -136,4 +137,10 @@ irq_setup(void)
     nvic_enable_irq(NVIC_USAGE_FAULT_IRQ);
     nvic_set_priority(NVIC_USAGE_FAULT_IRQ, SYSCONF_FAULT_INTERRUPT_PRIORITY);
 
+}
+
+void sys_tick_handler(void)
+{
+    xPortSysTickHandler();
+    lv_tick_inc(1);
 }

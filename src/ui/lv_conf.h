@@ -66,7 +66,7 @@ typedef int16_t lv_coord_t;
  * The graphical objects and other related data are stored here. */
 
 /* 1: use custom malloc/free, 0: use the built-in `lv_mem_alloc` and `lv_mem_free` */
-#define LV_MEM_CUSTOM      0
+#define LV_MEM_CUSTOM      1
 #if LV_MEM_CUSTOM == 0
 /* Size of the memory used by `lv_mem_alloc` in bytes (>= 2kB)*/
 #  define LV_MEM_SIZE    (32U * 1024U)
@@ -142,10 +142,10 @@ typedef void * lv_group_user_data_t;
 #endif  /*LV_USE_GROUP*/
 
 /* 1: Enable GPU interface*/
-#define LV_USE_GPU              1
+#define LV_USE_GPU              0
 
 /* 1: Enable file system (might be required for images */
-#define LV_USE_FILESYSTEM       1
+#define LV_USE_FILESYSTEM       0
 #if LV_USE_FILESYSTEM
 /*Declare the type of the user data of file system drivers (can be e.g. `void *`, `int`, `struct`)*/
 typedef void * lv_fs_drv_user_data_t;
@@ -159,10 +159,10 @@ typedef void * lv_fs_drv_user_data_t;
  *========================*/
 
 /* 1: Enable indexed (palette) images */
-#define LV_IMG_CF_INDEXED       1
+#define LV_IMG_CF_INDEXED       0
 
 /* 1: Enable alpha indexed images */
-#define LV_IMG_CF_ALPHA         1
+#define LV_IMG_CF_ALPHA         0
 
 /* Default image cache size. Image caching keeps the images opened.
  * If only the built-in image formats are used there is no real advantage of caching.
@@ -335,13 +335,13 @@ typedef void * lv_obj_user_data_t;
 #endif
 
 /*Button matrix (dependencies: -)*/
-#define LV_USE_BTNM     1
+#define LV_USE_BTNM     0
 
 /*Calendar (dependencies: -)*/
 #define LV_USE_CALENDAR 1
 
 /*Canvas (dependencies: lv_img)*/
-#define LV_USE_CANVAS   1
+#define LV_USE_CANVAS   0
 
 /*Check box (dependencies: lv_btn, lv_label)*/
 #define LV_USE_CB       1
@@ -366,17 +366,17 @@ typedef void * lv_obj_user_data_t;
 #define LV_USE_GAUGE    1
 
 /*Image (dependencies: lv_label*/
-#define LV_USE_IMG      1
+#define LV_USE_IMG      0
 
 /*Image Button (dependencies: lv_btn*/
-#define LV_USE_IMGBTN   1
+#define LV_USE_IMGBTN   0
 #if LV_USE_IMGBTN
 /*1: The imgbtn requires left, mid and right parts and the width can be set freely*/
 #  define LV_IMGBTN_TILED 0
 #endif
 
 /*Keyboard (dependencies: lv_btnm)*/
-#define LV_USE_KB       1
+#define LV_USE_KB       0
 
 /*Label (dependencies: -*/
 #define LV_USE_LABEL    1
@@ -411,7 +411,7 @@ typedef void * lv_obj_user_data_t;
 #define LV_USE_LMETER   1
 
 /*Message box (dependencies: lv_rect, lv_btnm, lv_label)*/
-#define LV_USE_MBOX     1
+#define LV_USE_MBOX     0
 
 /*Page (dependencies: lv_cont)*/
 #define LV_USE_PAGE     1
@@ -461,7 +461,7 @@ typedef void * lv_obj_user_data_t;
 #endif
 
 /*Tab (dependencies: lv_page, lv_btnm)*/
-#define LV_USE_TABVIEW      1
+#define LV_USE_TABVIEW      0
 #  if LV_USE_TABVIEW != 0
 /*Time of slide animation [ms] (0: no animation)*/
 #  define LV_TABVIEW_DEF_ANIM_TIME    300
@@ -475,7 +475,7 @@ typedef void * lv_obj_user_data_t;
 #endif
 
 /*Window (dependencies: lv_cont, lv_btn, lv_label, lv_img, lv_page)*/
-#define LV_USE_WIN      1
+#define LV_USE_WIN      0
 
 /*==================
  * Non-user section

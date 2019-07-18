@@ -91,6 +91,5 @@
    standard names. */
 #define vPortSVCHandler sv_call_handler
 #define xPortPendSVHandler pend_sv_handler
-#define xPortSysTickHandler sys_tick_handler
 
 #endif /* FREERTOS_CONFIG_H */
