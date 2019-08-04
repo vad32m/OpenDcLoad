@@ -16,7 +16,6 @@ FREERTOS_ARCH_FLAGS = $(ARCH_FLAGS)
 
 include ./rtos/Makefile
 
-
 LVGL_DIR = ./src/ui
 
 include ./src/ui/lvgl/lvgl.mk
@@ -29,7 +28,8 @@ CFILES += src/main.c \
 	src/platform/display_connection.c \
 	src/debug/logging.c \
 	src/debug/assertions.c \
-	src/driver/ili9486/display_driver.c
+	src/driver/ili9486/display_driver.c \
+	src/ui/display_lvgl_adapter.c
 
 INCLUDES = $(FREERTOS_INCLUDES) \
     -I./src/fault_handlers/inc/ \

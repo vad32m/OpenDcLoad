@@ -13,14 +13,8 @@
 #include "driver/ili9486/display_driver.h"
 #include "platform/display_connection.h"
 
+#include "ui/display_lvgl_adapter.h"
 #include "lvgl.h"
-
-lv_disp_t* lvgl_disp;
-lv_disp_drv_t lvgl_drv;
-lv_disp_buf_t lvgl_buf;
-
-static lv_color_t buf_1[480 * 20];
-static lv_color_t buf_2[480 * 20];
 
 static void
 gpio_setup(void)
@@ -36,26 +30,6 @@ gpio_setup(void)
 }
 
 struct display_driver display;
-
-static void
-lv_display_flush_cb(lv_disp_drv_t* disp_drv, const lv_area_t* area, lv_color_t* color_p)
-{
-    struct display_area disp_area;
-    disp_area.xStart = area->x1;
-    disp_area.xEnd = area->x2 + 1;
-    disp_area.yStart = area->y1;
-    disp_area.yEnd = area->y2 + 1;
-    display_write_image(&display, &disp_area, color_p);
-}
-
-static void
-lv_display_cb_glue(void)
-{
-    lv_disp_flush_ready(&lvgl_drv);
-}
-
-static void btn_event_cb(lv_obj_t * btn, lv_event_t event);
-static void ddlist_event_cb(lv_obj_t * ddlist, lv_event_t event);
 
 /**********************
  *  STATIC VARIABLES
@@ -91,15 +65,6 @@ void lv_tutorial_objects(void)
     lv_obj_set_size(slider, lv_obj_get_width(scr)  / 3, LV_DPI / 3);            /*Set the size*/
     lv_obj_align(slider, label, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);                /*Align below the first button*/
     lv_slider_set_value(slider, 30, false);                                            /*Set the current value*/
-
-    /***********************
-     * ADD A DROP DOWN LIST
-     ************************/
-    lv_obj_t * ddlist = lv_ddlist_create(scr, NULL);                     /*Create a drop down list*/
-    lv_obj_align(ddlist, slider, LV_ALIGN_OUT_RIGHT_TOP, 50, 0);         /*Align next to the slider*/
-    lv_obj_set_top(ddlist, true);                                        /*Enable to be on the top when clicked*/
-    lv_ddlist_set_options(ddlist, "None\nLittle\nHalf\nA lot\nAll");     /*Set the options*/
-    lv_obj_set_event_cb(ddlist, ddlist_event_cb);                        /*Set function to call on new option is chosen*/
 
     /****************
      * CREATE A CHART
@@ -148,38 +113,10 @@ static void btn_event_cb(lv_obj_t * btn, lv_event_t event)
     }
 }
 
-/**
- * Called when a new option is chosen in the drop down list
- * @param ddlist pointer to the drop down list
- * @param event the triggering event
- * @return LV_RES_OK because the object is not deleted in this function
- */
-static  void ddlist_event_cb(lv_obj_t * ddlist, lv_event_t event)
-{
-    if(event == LV_EVENT_VALUE_CHANGED) {
-        uint16_t opt = lv_ddlist_get_selected(ddlist);            /*Get the id of selected option*/
-
-        lv_slider_set_value(slider, (opt * 100) / 4, true);       /*Modify the slider value according to the selection*/
-    }
-
-}
 
 static void
 task1(void *args __attribute((unused)))
 {
-    uint16_t color = 1;
-    display_init(&display, displayOrientationHorizontalFlipped);
-	display_clear(&display, 0x0220);
-
-    lv_disp_buf_init(&lvgl_buf, buf_1, buf_2, 480 * 20);
-    lv_disp_drv_init(&lvgl_drv);
-
-    lvgl_drv.buffer = &lvgl_buf;
-    lvgl_drv.flush_cb = &lv_display_flush_cb;
-    lvgl_disp = lv_disp_drv_register(&lvgl_drv);
-
-    display_set_callback(&display, &lv_display_cb_glue);
-
     for (;;) {
         lv_tutorial_objects();
         vTaskDelay(pdMS_TO_TICKS(600));
@@ -208,6 +145,9 @@ main(void)
     irq_setup();
     logger_init();
     display_connection_init();
+    display_init(&display, displayOrientationHorizontalFlipped);
+    lv_init();
+    display_lvgl_adapter_init(&display);
 
 
 #if !TEST_BUS_FAULT
@@ -257,7 +197,6 @@ main(void)
     volatile int b = 10/a;
 #endif
 
-    lv_init();
     xTaskCreate(task1, "LED", 256, NULL, configMAX_PRIORITIES - 1, NULL);
     vTaskStartScheduler();
 
