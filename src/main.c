@@ -31,94 +31,91 @@ gpio_setup(void)
 
 struct display_driver display;
 
-/**********************
- *  STATIC VARIABLES
- **********************/
-static lv_obj_t * slider;
+static void
+disable_indent(lv_obj_t *object)
+{
+    lv_style_t* style = lv_obj_get_style(object);
+    style->body.padding.bottom = 0;
+    style->body.padding.inner = 0;
+    style->body.padding.left = 0;
+    style->body.padding.right = 0;
+    style->body.padding.top = 0;
+    lv_obj_set_style(object, style);
+}
 
-/**
- * Create some objects
- */
+static const char* btnmap[] = {"First", "Second", LV_SYMBOL_OK, "Fourth", ""};
+static const char* labels[] = {"I: 2 A", "U: 4 V", "R: 2 Ohm", "P: 8 W", ""};
+
 void lv_tutorial_objects(void)
 {
-    static int i = 0;
+    lv_theme_t* th = lv_theme_night_init(20, NULL);
+    lv_theme_set_current(th);
     /********************
      * CREATE A SCREEN
      *******************/
     /* Create a new screen and load it
      * Screen can be created from any type object type
-     * Now a Page is used which is an objects with scrollable content*/
-    lv_obj_t * scr = lv_page_create(NULL, NULL);
+     **/
+    lv_obj_t* scr = lv_obj_create(NULL, NULL);
+    disable_indent(scr);
     lv_disp_load_scr(scr);
 
     /****************
      * ADD A TITLE
      ****************/
-    lv_obj_t * label = lv_label_create(scr, NULL); /*First parameters (scr) is the parent*/
-    lv_label_set_text(label, "Object usage demo");  /*Set the text*/
-    lv_obj_set_x(label, 50);                        /*Set the x coordinate*/
+    lv_obj_t* buttons = lv_btnm_create(scr, NULL);
+    lv_btnm_set_map(buttons, btnmap);
+    lv_obj_set_pos(buttons, 0, 285);
+    lv_obj_set_size(buttons, 480, 35);
+    disable_indent(buttons);
 
-    /****************
-     * ADD A SLIDER
-     ****************/
-    slider = lv_slider_create(scr, NULL);                            /*Create a slider*/
-    lv_obj_set_size(slider, lv_obj_get_width(scr)  / 3, LV_DPI / 3);            /*Set the size*/
-    lv_obj_align(slider, label, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);                /*Align below the first button*/
-    lv_slider_set_value(slider, 30, false);                                            /*Set the current value*/
+    //Create informational ribbon on top
 
-    /****************
-     * CREATE A CHART
-     ****************/
-    lv_obj_t * chart = lv_chart_create(scr, NULL);                         /*Create the chart*/
-    lv_obj_set_size(chart, lv_obj_get_width(scr) / 2, lv_obj_get_width(scr) / 4);   /*Set the size*/
-    lv_obj_align(chart, slider, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 50);                   /*Align below the slider*/
-    lv_chart_set_series_width(chart, 3);                                            /*Set the line width*/
+    lv_obj_t* top_container = lv_cont_create(scr, NULL);
+    lv_cont_set_fit(top_container, LV_FIT_NONE);
+    lv_cont_set_layout(top_container, LV_LAYOUT_PRETTY);
+    lv_obj_set_pos(top_container, 0, 0);
+    lv_obj_set_size(top_container, 480, 35);
 
-    /*Add a RED data series and set some points*/
-    lv_chart_series_t * dl1 = lv_chart_add_series(chart, LV_COLOR_RED);
-    lv_chart_set_next(chart, dl1, i++);
-    lv_chart_set_next(chart, dl1, i++);
-    lv_chart_set_next(chart, dl1, i++);
-    lv_chart_set_next(chart, dl1, i++);
 
-    /*Add a BLUE data series and set some points*/
-    lv_chart_series_t * dl2 = lv_chart_add_series(chart, lv_color_make(0x40, 0x70, 0xC0));
-    lv_chart_set_next(chart, dl2, i++);
-    lv_chart_set_next(chart, dl2, i++);
-    lv_chart_set_next(chart, dl2, i++);
-    lv_chart_set_next(chart, dl2, i++);
-    lv_chart_set_next(chart, dl2, i++);
-    lv_chart_set_next(chart, dl2, i++);
-    if (i > 25) {
-        i = 0;
+        int32_t i = 0;
+
+    while (*(labels[i]))
+    {
+        lv_obj_t* label = lv_label_create(top_container, NULL);
+
+
+        lv_label_set_text(label, labels[i]);
+        i++;
     }
+
+    lv_obj_t * chart;
+    chart = lv_chart_create(scr, NULL);
+
+    lv_style_t* style = malloc(sizeof(lv_style_t));
+    lv_style_copy(style, lv_obj_get_style(chart));
+    
+    style->text.font = &lv_font_roboto_12;
+    lv_obj_set_style(chart, style);
+    lv_obj_refresh_style(chart);
+
+    lv_obj_set_pos(chart, 20, 50);
+    lv_obj_set_size(chart, 440, 210);
+    lv_chart_set_x_tick_texts(chart, "1\n2\n3\n4\n5\n6\n", 2, LV_CHART_AXIS_DRAW_LAST_TICK);
+    lv_chart_set_x_tick_length(chart, 5, 8);
+    lv_chart_set_y_tick_texts(chart, "4\n3\n2\n1\n", 2, LV_CHART_AXIS_DRAW_LAST_TICK);
+    lv_chart_set_y_tick_length(chart, 5, 8);
+    lv_chart_set_margin(chart, 30);
+
 }
 
-/**********************
- *   STATIC FUNCTIONS
- **********************/
-
-/**
- * Called when a button is released
- * @param btn pointer to the released button
- * @param event the triggering event
- * @return LV_RES_OK because the object is not deleted in this function
- */
-static void btn_event_cb(lv_obj_t * btn, lv_event_t event)
-{
-    if(event == LV_EVENT_RELEASED) {
-        /*Increase the button width*/
-        lv_coord_t width = lv_obj_get_width(btn);
-        lv_obj_set_width(btn, width + 20);
-    }
-}
 
 
 static void
 task1(void *args __attribute((unused)))
 {
+    lv_tutorial_objects();
     for (;;) {
-        lv_tutorial_objects();
         vTaskDelay(pdMS_TO_TICKS(600));
         lv_task_handler();
         gpio_toggle(GPIOA, GPIO7);
