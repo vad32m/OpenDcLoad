@@ -16,7 +16,7 @@
  */
 typedef struct param_setup_view_struct {
     ui_view_t view;
-    //TODO: other non-generic fields
+    void* private_data;
 } param_setup_view_t;
 
 /**
@@ -36,14 +36,6 @@ int32_t param_setup_view_init(param_setup_view_t* view_to_init);
  */
 int32_t param_setup_set_upper_line_texts(param_setup_view_t* view, const char** labels, uint8_t labels_count);
 
-/**
- * Set label for specific button
- * @param view pointer to view
- * @param label text to be used as label
- * @param btn_index for which button text shall be set
- * @return 0 on successful operation, error code otherwise
- */
-int32_t param_setup_view_set_button_label(param_setup_view_t* view, const char* label, uint8_t btn_index);
 
 /**
  * Set data that will be displayed on the screen
