@@ -17,7 +17,7 @@
  */
 typedef struct mode_select_view_struct {
     ui_view_t view;
-    //TODO: other non-generic fields
+    void* pvt_data;
 } mode_select_view_t;
 
 /**
@@ -58,15 +58,6 @@ int32_t mode_select_view_set_selected_mode(mode_select_view_t* view, uint8_t id)
  * @return ID of the selected item
  */
 uint8_t mode_select_view_get_selected_mode(mode_select_view_t* view);
-
-/**
- * Set label for specific button
- * @param view pointer to mode select view
- * @param label text to be used as label
- * @param btn_index for which button text shall be set
- * @return 0 on successful operation, error code otherwise
- */
-int32_t mode_select_view_set_button_label(mode_select_view_t* view, const char* label, uint8_t btn_index);
 
 /**
  * Dispose view and free associated resources
