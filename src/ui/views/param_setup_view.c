@@ -6,9 +6,11 @@
  */
 
 #include "src/ui/views/param_setup_view.h"
+#include "src/ui/views/param_setup_view_layout.h"
 #include "src/ui/views/lvgl_view.h"
 
 #include "lvgl.h"
+#include <stdlib.h>
 
 typedef struct param_setup_view_pvt_data {
     lv_obj_t* top_container;
@@ -43,18 +45,17 @@ int32_t param_setup_view_init(param_setup_view_t* view_to_init)
         view_data->top_container = lv_cont_create(screen, NULL);
         lv_cont_set_fit(view_data->top_container, LV_FIT_NONE);
         lv_cont_set_layout(view_data->top_container, LV_LAYOUT_PRETTY);
-        lv_obj_set_pos(view_data->top_container, 0, 0);
-        lv_obj_set_size(view_data->top_container, 480, 35);
+        lv_obj_set_pos(view_data->top_container, UI_TOP_RIBBON_X_POS, UI_TOP_RIBBON_Y_POS);
+        lv_obj_set_size(view_data->top_container, UI_VIEW_WIDTH, UI_TOP_RIBBON_HEIGHT);
 
         view_data->param_table = lv_table_create(screen, NULL);
-        lv_obj_set_pos(view_data->param_table, 30, 110);
-        lv_obj_set_size(view_data->param_table, 420, 60);
-        lv_table_set_col_cnt(view_data->param_table, 2);
-        lv_table_set_row_cnt(view_data->param_table, 1);
+        lv_obj_set_pos(view_data->param_table, UI_PARAM_TABLE_X_POS, UI_PARAM_TABLE_Y_POS);
+        lv_table_set_col_cnt(view_data->param_table, UI_PARAM_TABLE_COL_COUNT);
+        lv_table_set_row_cnt(view_data->param_table, UI_PARAM_TABLE_ROW_COUNT);
         lv_table_set_cell_align(view_data->param_table, 0, 0, LV_LABEL_ALIGN_RIGHT);
         lv_table_set_cell_align(view_data->param_table, 0, 1, LV_LABEL_ALIGN_LEFT);
-        lv_table_set_col_width(view_data->param_table, 0, 200);
-        lv_table_set_col_width(view_data->param_table, 1, 220);
+        lv_table_set_col_width(view_data->param_table, 0, UI_PARAM_TABLE_FIRST_COL_WIDTH);
+        lv_table_set_col_width(view_data->param_table, 1, UI_PARAM_TABLE_SECOND_COL_WIDTH);
 
         view_data->table_style = malloc(sizeof(lv_style_t));
         if (view_data->table_style) {
@@ -68,9 +69,9 @@ int32_t param_setup_view_init(param_setup_view_t* view_to_init)
         }
 
         view_data->slider = lv_bar_create(screen, NULL);
-        lv_obj_set_pos(view_data->slider, 30, 220);
-        lv_obj_set_size(view_data->slider, 420, 40);
-        lv_bar_set_range(view_data->slider, 0, 255);
+        lv_obj_set_pos(view_data->slider, UI_PARAM_BAR_X_POS, UI_PARAM_BAR_Y_POS);
+        lv_obj_set_size(view_data->slider, UI_PARAM_BAR_WIDTH, UI_PARAM_BAR_HEIGHT);
+        lv_bar_set_range(view_data->slider, 0, UINT8_MAX);
 
         view_to_init->view.draw = &param_setup_view_draw;
         return 0;

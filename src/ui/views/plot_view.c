@@ -4,18 +4,24 @@
  *  Created on: Sep 22, 2019
  *      Author: vadym
  */
-
+#include "src/ui/views/plot_view_layout.h"
 #include "src/ui/views/plot_view.h"
 #include "src/ui/views/lvgl_view.h"
 
 #include "lvgl.h"
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 #define AXIS_LABELS_BUFFER_SIZE 30
 
-#define CHART_VERT_RESOLUTION (210 - 50)
 #define MAX_PLOTS_PER_CHART 2
+#define LV_CHART_MARGIN ((UI_VIEW_WIDTH - UI_PLOT_WIDTH) / 2)
+#define LV_CHART_TICK_LENGTH 4
+
+#define LV_CHART_DEF_HORIZ_LINES 3
+#define LV_CHART_DEF_VERTICAL_LINES 4
+#define LV_CHART_DEF_X_MAX_VALUE 10
 
 struct plot_view_plot_struct {
     lv_chart_series_t* series;
@@ -104,16 +110,16 @@ int32_t plot_view_init(plot_view_t* view_to_init)
 
     if (view_data) {
         view_data->x_axis.display_min.int_repr = 0;
-        view_data->x_axis.display_max.int_repr = 10;
+        view_data->x_axis.display_max.int_repr = LV_CHART_DEF_X_MAX_VALUE;
 
         view_data->primary_y_axis.display_min.int_repr = 0;
-        view_data->primary_y_axis.display_max.int_repr = CHART_VERT_RESOLUTION;
+        view_data->primary_y_axis.display_max.int_repr = UI_PLOT_HEIGTH;
 
         view_data->secondary_y_axis.display_min.int_repr = 0;
-        view_data->secondary_y_axis.display_max.int_repr = CHART_VERT_RESOLUTION;
+        view_data->secondary_y_axis.display_max.int_repr = UI_PLOT_HEIGTH;
 
-        view_data->vertical_div_lines = 4;
-        view_data->horiz_div_lines = 3;
+        view_data->vertical_div_lines = LV_CHART_DEF_VERTICAL_LINES;
+        view_data->horiz_div_lines = LV_CHART_DEF_HORIZ_LINES;
 
         view_to_init->private_data = view_data;
         //Create informational ribbon on top
@@ -121,8 +127,8 @@ int32_t plot_view_init(plot_view_t* view_to_init)
         view_data->top_container = lv_cont_create(screen, NULL);
         lv_cont_set_fit(view_data->top_container, LV_FIT_NONE);
         lv_cont_set_layout(view_data->top_container, LV_LAYOUT_PRETTY);
-        lv_obj_set_pos(view_data->top_container, 0, 0);
-        lv_obj_set_size(view_data->top_container, 480, 35);
+        lv_obj_set_pos(view_data->top_container, UI_TOP_RIBBON_X_POS, UI_TOP_RIBBON_Y_POS);
+        lv_obj_set_size(view_data->top_container, UI_VIEW_WIDTH, UI_TOP_RIBBON_HEIGHT);
 
         view_data->chart = lv_chart_create(screen, NULL);
         //TODO: check if leaks
@@ -132,18 +138,18 @@ int32_t plot_view_init(plot_view_t* view_to_init)
         style->text.font = &lv_font_roboto_12;
         lv_obj_set_style(view_data->chart, style);
         lv_obj_refresh_style(view_data->chart);
-        lv_chart_set_margin(view_data->chart, 30);
+        lv_chart_set_margin(view_data->chart, LV_CHART_MARGIN);
 
-        lv_obj_set_pos(view_data->chart, 30, 50);
-        lv_obj_set_size(view_data->chart, 420, 210);
+        lv_obj_set_pos(view_data->chart, UI_PLOT_X_POS, UI_PLOT_Y_POS);
+        lv_obj_set_size(view_data->chart, UI_PLOT_WIDTH, UI_PLOT_HEIGTH);
 
-        lv_chart_set_y_tick_length(view_data->chart, 5, 8);
-        lv_chart_set_secondary_y_tick_length(view_data->chart, 5, 8);
-        lv_chart_set_x_tick_length(view_data->chart, 5, 8);
+        lv_chart_set_y_tick_length(view_data->chart, LV_CHART_TICK_LENGTH, LV_CHART_TICK_LENGTH);
+        lv_chart_set_secondary_y_tick_length(view_data->chart, LV_CHART_TICK_LENGTH, LV_CHART_TICK_LENGTH);
+        lv_chart_set_x_tick_length(view_data->chart, LV_CHART_TICK_LENGTH, LV_CHART_TICK_LENGTH);
         lv_chart_set_point_count(view_data->chart,
                 view_data->x_axis.points_max - view_data->x_axis.points_min);
         lv_chart_set_update_mode(view_data->chart, LV_CHART_UPDATE_MODE_SHIFT);
-        lv_chart_set_range(view_data->chart, 0, CHART_VERT_RESOLUTION);
+        lv_chart_set_range(view_data->chart, 0, UI_PLOT_HEIGTH);
 
         for (uint32_t i = 0; i < MAX_PLOTS_PER_CHART; i++) {
             view_data->plot_pool[i].reference_range = NULL;
@@ -255,7 +261,7 @@ int32_t plot_view_plot_add_points(plot_view_plot_t* plot, int16_t* points, int16
     float scaling_factor;
     lv_coord_t point_coord;
     scaling_factor = plot->reference_range->points_max - plot->reference_range->points_min;
-    scaling_factor = CHART_VERT_RESOLUTION / scaling_factor;
+    scaling_factor = UI_PLOT_HEIGTH / scaling_factor;
 
     for (uint8_t i = 0; i < points_num; i++) {
         point_coord = points[i] - plot->reference_range->points_min;

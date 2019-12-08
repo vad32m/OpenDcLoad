@@ -1,10 +1,14 @@
 
 #include "src/ui/views/mode_select_view.h"
+#include "src/ui/views/mode_select_view_layout.h"
 #include "src/ui/views/lvgl_view.h"
 #include "lvgl.h"
 
+#include <stdlib.h>
+
 #define MODE_SELECT_BUF_SIZE 120
 #define MAX_NUMBER_OF_LIST_ITEMS 5
+#define UI_MODES_LIST_LINES 6
 
 typedef struct mode_select_view_pvt_data_struct {
     lv_obj_t* list;
@@ -28,10 +32,10 @@ int32_t mode_select_view_init(mode_select_view_t* view_to_init)
     if (view_data) {
         view_to_init->pvt_data = view_data;
         view_data->list = lv_roller_create(screen, NULL);
-        lv_obj_set_pos(view_data->list, 30, 30);
-        lv_obj_set_size(view_data->list, 420, 250);
-        lv_roller_set_fix_width(view_data->list, 420);
-        lv_roller_set_visible_row_count(view_data->list, 6);
+        lv_obj_set_pos(view_data->list, UI_MODES_LIST_X_POS, UI_MODES_LIST_Y_POS);
+        lv_obj_set_size(view_data->list, UI_MODES_LIST_WIDTH, UI_MODES_LIST_HEIGHT);
+        lv_roller_set_fix_width(view_data->list, UI_MODES_LIST_WIDTH);
+        lv_roller_set_visible_row_count(view_data->list, UI_MODES_LIST_LINES);
         view_to_init->view.draw = &mode_select_view_draw;
         return 0;
     }
