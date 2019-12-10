@@ -1,8 +1,5 @@
-/*
- * values_wiev_layout.h
- *
- *  Created on: Dec 8, 2019
- *      Author: vadym
+/**
+ * Coordinates of UI elements of values view
  */
 
 #ifndef SRC_UI_VIEWS_VALUES_VIEW_LAYOUT_H_

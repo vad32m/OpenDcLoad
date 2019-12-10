@@ -1,13 +1,8 @@
-/*
- * param_setup_view.c
- *
- *  Created on: Dec 5, 2019
- *      Author: vadym
- */
+#include "ui/views/param_setup_view.h"
+#include "ui/views/param_setup_view_layout.h"
+#include "ui/views/lvgl_view.h"
 
-#include "src/ui/views/param_setup_view.h"
-#include "src/ui/views/param_setup_view_layout.h"
-#include "src/ui/views/lvgl_view.h"
+#include "error_codes.h"
 
 #include "lvgl.h"
 #include <stdlib.h>
@@ -24,14 +19,10 @@ static int32_t param_setup_view_draw(ui_view_t* view)
 {
     lv_obj_t* screen = lvgl_basic_view_get_screen(view);
     lv_disp_load_scr(screen);
-    return 0;
+    return ERR_OK;
 }
 
-/**
- * Initialize param setup view data structure
- * @param view_to_init pointer to param setup view to be initialized
- * @return 0 on successful initialization, error code otherwise
- */
+
 int32_t param_setup_view_init(param_setup_view_t* view_to_init)
 {
     lvgl_basic_view_create(&view_to_init->view);
@@ -74,20 +65,13 @@ int32_t param_setup_view_init(param_setup_view_t* view_to_init)
         lv_bar_set_range(view_data->slider, 0, UINT8_MAX);
 
         view_to_init->view.draw = &param_setup_view_draw;
-        return 0;
+        return ERR_OK;
     }
 
-    return -1;
+    return ERR_NOMEM;
 }
 
 
-/**
- * Put labels on line on the top of the screen
- * @param view pointer to view
- * @param labels pointer to array of pointers to string containing text to be set
- * @param labels_count number of labels in labels array
- * @return 0 on successful operation, error code otherwise
- */
 int32_t param_setup_set_upper_line_texts(param_setup_view_t* view, const char** labels, uint8_t labels_count)
 {
     param_setup_view_pvt_data_t* pvt_data = view->private_data;
@@ -99,48 +83,31 @@ int32_t param_setup_set_upper_line_texts(param_setup_view_t* view, const char** 
         if (!label) {
             //allocation error
             lv_obj_clean(pvt_data->top_container);
-            return -1;
+            return ERR_NOMEM;
         }
         lv_label_set_text(label, labels[i]);
     }
-    return 0;
+    return ERR_OK;
 }
 
 
-/**
- * Set data that will be displayed on the screen
- * @param view pointer to view
- * @param label text to be used as label
- * @param value text to be used as value
- * @return 0 on successful operation, error code otherwise
- */
 int32_t param_setup_view_set_parameter_data(param_setup_view_t* view, const char* label, const char *value)
 {
     param_setup_view_pvt_data_t* view_data = view->private_data;
     lv_table_set_cell_value(view_data->param_table, 0, 0, label);
     lv_table_set_cell_value(view_data->param_table, 0, 1, value);
-    return 0;
+    return ERR_OK;
 }
 
 
-/**
- * Set how much of the bar shall be filled. Progress bar is used
- * to give better visual understanding of value range
- * @param view pointr to view
- * @param val how much of the progress bar shall be filled (0 - no fill, 255 - fully filled)
- * @return 0 on successful operation, error code otherwise
- */
 int32_t param_setup_view_set_bar_position(param_setup_view_t* view, uint8_t val)
 {
     param_setup_view_pvt_data_t* view_data = view->private_data;
     lv_bar_set_value(view_data->slider, val, LV_ANIM_OFF);
-    return 0;
+    return ERR_OK;
 }
 
 
-/**
- * Dispose param setup view and free associated resources
- */
 void param_setup_view_destroy(param_setup_view_t* view_to_destroy)
 {
     param_setup_view_pvt_data_t* view_data = view_to_destroy->private_data;

@@ -1,8 +1,5 @@
-/*
- * plot_view_layout.h
- *
- *  Created on: Dec 8, 2019
- *      Author: vadym
+/**
+ * Coordinates for UI elements of plot view
  */
 
 #ifndef SRC_UI_VIEWS_PLOT_VIEW_LAYOUT_H_

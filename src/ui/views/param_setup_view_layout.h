@@ -1,14 +1,11 @@
-/*
- * param_setup_view_layout.h
- *
- *  Created on: Dec 8, 2019
- *      Author: vadym
+/**
+ * Coordinates for UI elements of parameter setup view
  */
 
 #ifndef SRC_UI_VIEWS_PARAM_SETUP_VIEW_LAYOUT_H_
 #define SRC_UI_VIEWS_PARAM_SETUP_VIEW_LAYOUT_H_
 
-#include "src/ui/views/basic_view_layout.h"
+#include "ui/views/basic_view_layout.h"
 
 /*
 +--------------------------------------------------------------------------------------+

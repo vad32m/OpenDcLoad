@@ -1,10 +1,6 @@
-/*
- * mode_select_view_layout.h
- *
- *  Created on: Dec 8, 2019
- *      Author: vadym
+/**
+ * Coordinates for UI elements of mode select screen
  */
-
 #ifndef SRC_UI_VIEWS_MODE_SELECT_VIEW_LAYOUT_H_
 #define SRC_UI_VIEWS_MODE_SELECT_VIEW_LAYOUT_H_
 
