@@ -29,7 +29,12 @@ CFILES += src/main.c \
 	src/debug/logging.c \
 	src/debug/assertions.c \
 	src/driver/ili9486/display_driver.c \
-	src/ui/display_lvgl_adapter.c
+	src/ui/display_lvgl_adapter.c \
+	src/ui/views/lvgl_basic_view.c \
+	src/ui/views/values_view.c \
+	src/ui/views/plot_view.c \
+	src/ui/views/param_setup_view.c \
+	src/ui/views/mode_select_view.c
 
 INCLUDES = $(FREERTOS_INCLUDES) \
     -I./src/fault_handlers/inc/ \
