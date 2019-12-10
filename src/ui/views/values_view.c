@@ -13,13 +13,6 @@ typedef struct values_view_pvt_data_struct {
     lv_obj_t* table;
 } values_view_pvt_data_t;
 
-static int32_t values_view_draw(ui_view_t* view)
-{
-    values_view_t* this = view;
-    lv_obj_t* screen = lvgl_basic_view_get_screen(view);
-    lv_disp_load_scr(screen);
-}
-
 int32_t values_view_init(values_view_t* view_to_init)
 {
     ASSERT_PTR_VALID(view_to_init);
@@ -31,7 +24,6 @@ int32_t values_view_init(values_view_t* view_to_init)
     ASSERT_NON_NULL(view_data);
 
     if (view_data) {
-        view_to_init->view.draw = &values_view_draw;
         view_to_init->private_data = view_data;
         view_data->table = lv_table_create(screen, NULL);
         lv_table_set_col_cnt(view_data->table, UI_VALUES_TABLE_COLS);

@@ -9,6 +9,7 @@
 typedef struct lvgl_view_private_data_struct {
     lv_obj_t* screen;
     lv_obj_t* button_matrix;
+    char const * btn_labels[UI_BUTTONS_COUNT + 1];
 } lvgl_view_private_data_t;
 
 static const char* dummy_btnmap[] = {LV_SYMBOL_HOME, LV_SYMBOL_UP, LV_SYMBOL_DOWN, LV_SYMBOL_OK, ""};
@@ -42,6 +43,45 @@ lv_obj_t* lvgl_basic_view_get_screen(ui_view_t* basic_view)
     return pvt_data->screen;
 }
 
+void lvgl_basic_view_activate(ui_view_t* view)
+{
+    lv_obj_t* screen = lvgl_basic_view_get_screen(view);
+    lv_disp_load_scr(screen);
+}
+
+int32_t view_set_button_labels(ui_view_t* basic_view, char const * const labels[])
+{
+    ASSERT_PTR_VALID(basic_view);
+    ASSERT_PTR_VALID(labels);
+
+    lvgl_view_private_data_t* pvt_data = basic_view->private_data;
+
+    for (uint8_t i = 0; i < UI_BUTTONS_COUNT; i++) {
+        pvt_data->btn_labels[i] = labels[i];
+    }
+    pvt_data->btn_labels[UI_BUTTONS_COUNT] = "";
+
+    lv_btnm_set_map(pvt_data->button_matrix, pvt_data->btn_labels);
+    return ERR_OK;
+}
+
+void view_set_button_pressed(ui_view_t* view, uint8_t btn_index)
+{
+    ASSERT_PTR_VALID(view);
+    ASSERT_TRUE(btn_index < UI_BUTTONS_COUNT);
+
+    lvgl_view_private_data_t* pvt_data = view->private_data;
+    lv_btnm_set_pressed(pvt_data->button_matrix, btn_index);
+}
+
+void view_release_all_buttons(ui_view_t* view)
+{
+    ASSERT_PTR_VALID(view);
+
+    lvgl_view_private_data_t* pvt_data = view->private_data;
+    lv_btnm_set_pressed(pvt_data->button_matrix, LV_BTNM_BTN_NONE);
+}
+
 void lvgl_basic_view_destroy(ui_view_t* view)
 {
     ASSERT_PTR_VALID(view);
@@ -49,5 +89,6 @@ void lvgl_basic_view_destroy(ui_view_t* view)
     lvgl_view_private_data_t* pvt_data = view->private_data;
     lv_obj_clean(pvt_data->screen);
     lv_obj_del(pvt_data->screen);
+    free(pvt_data);
 }
 

@@ -18,13 +18,6 @@ typedef struct mode_select_view_pvt_data_struct {
     uint8_t index_map[MAX_NUMBER_OF_LIST_ITEMS];
 } mode_select_view_pvt_data_t;
 
-static int32_t mode_select_view_draw(ui_view_t* view)
-{
-    lv_obj_t* screen = lvgl_basic_view_get_screen(view);
-    lv_disp_load_scr(screen);
-    return ERR_OK;
-}
-
 int32_t mode_select_view_init(mode_select_view_t* view_to_init)
 {
     ASSERT_PTR_VALID(view_to_init);
@@ -42,7 +35,6 @@ int32_t mode_select_view_init(mode_select_view_t* view_to_init)
         lv_obj_set_size(view_data->list, UI_MODES_LIST_WIDTH, UI_MODES_LIST_HEIGHT);
         lv_roller_set_fix_width(view_data->list, UI_MODES_LIST_WIDTH);
         lv_roller_set_visible_row_count(view_data->list, UI_MODES_LIST_LINES);
-        view_to_init->view.draw = &mode_select_view_draw;
         return ERR_OK;
     }
 

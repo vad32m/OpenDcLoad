@@ -41,14 +41,6 @@ typedef struct plot_view_pvt_data_struct {
     plot_view_plot_t plot_pool[MAX_PLOTS_PER_CHART];
 } plot_view_pvt_data_t;
 
-static int32_t plot_view_draw(ui_view_t* view)
-{
-    plot_view_t* this = view;
-    lv_obj_t* screen = lvgl_basic_view_get_screen(view);
-    lv_disp_load_scr(screen);
-    return ERR_OK;
-}
-
 static int32_t get_axis_labels(int16_t start, int16_t end, uint8_t divisions_num, char* result)
 {
     uint8_t label_str_len = 0;
@@ -154,7 +146,6 @@ int32_t plot_view_init(plot_view_t* view_to_init)
             view_data->plot_pool[i].series = NULL;
         }
 
-        view_to_init->view.draw = &plot_view_draw;
         redraw_plot_legend(view_data);
         return ERR_OK;
     }

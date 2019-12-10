@@ -24,6 +24,11 @@ uint32_t lvgl_basic_view_create(ui_view_t* view_to_init);
 lv_obj_t* lvgl_basic_view_get_screen(ui_view_t* basic_view);
 
 /**
+ * Function that shall set current view as active (displayed on the basic screen)
+ */
+void lvgl_basic_view_activate(ui_view_t* view);
+
+/**
  * Free all resources associated with the view
  */
 void lvgl_basic_view_destroy(ui_view_t* view);

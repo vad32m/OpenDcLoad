@@ -8,22 +8,12 @@
 
 #include <stdint.h>
 
-
 typedef struct ui_view_struct ui_view_t;
-
-/**
- * All views should have this callback implemented because
- * it will be called by external API
- * @param pointer to view that should be active (self)
- * @return 0 in case of successfull completion, non-null error code otherwise
- */
-typedef int32_t (*draw_view_fxn)(ui_view_t* view);
 
 /**
  * Base class for all views in the system
  */
 struct ui_view_struct {
-    draw_view_fxn draw;
     void* private_data;
 };
 
@@ -37,12 +27,16 @@ typedef struct color_struct {
 } color_t;
 
 /**
- * Typedef for callback functions that get called
- * on button press
- * @param btn_id button identifier
+ * Function used to set labels on the buttons
+ * @param view view containing the buttons
+ * @param labels pointer to array, containing four strings
+ * with labels for buttons
+ * @return 0 (ERR_OK) on successful completion, error code otherwise
  */
-typedef void (*view_btn_pressed_fxn)(uint32_t btn_id);
+int32_t view_set_button_labels(ui_view_t* view, char const * const labels[]);
 
-void view_set_button_labels(char const * const labels[]);
+void view_set_button_pressed(ui_view_t* view, uint8_t btn_index);
+
+void view_release_all_buttons(ui_view_t* views);
 
 #endif /* SRC_UI_VIEW_H_ */

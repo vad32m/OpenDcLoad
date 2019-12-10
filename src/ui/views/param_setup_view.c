@@ -14,15 +14,6 @@ typedef struct param_setup_view_pvt_data {
     lv_style_t* table_style;
 } param_setup_view_pvt_data_t;
 
-
-static int32_t param_setup_view_draw(ui_view_t* view)
-{
-    lv_obj_t* screen = lvgl_basic_view_get_screen(view);
-    lv_disp_load_scr(screen);
-    return ERR_OK;
-}
-
-
 int32_t param_setup_view_init(param_setup_view_t* view_to_init)
 {
     lvgl_basic_view_create(&view_to_init->view);
@@ -64,7 +55,6 @@ int32_t param_setup_view_init(param_setup_view_t* view_to_init)
         lv_obj_set_size(view_data->slider, UI_PARAM_BAR_WIDTH, UI_PARAM_BAR_HEIGHT);
         lv_bar_set_range(view_data->slider, 0, UINT8_MAX);
 
-        view_to_init->view.draw = &param_setup_view_draw;
         return ERR_OK;
     }
 
