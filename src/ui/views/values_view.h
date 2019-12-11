@@ -9,7 +9,7 @@
 
 #include <stdint.h>
 
-#include "src/ui/view.h"
+#include "ui/views/basic_view.h"
 
 /**
  * Structure describing values table view

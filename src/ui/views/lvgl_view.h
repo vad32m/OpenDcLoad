@@ -7,7 +7,7 @@
 #ifndef SRC_UI_VIEWS_LVGL_VIEW_H_
 #define SRC_UI_VIEWS_LVGL_VIEW_H_
 
-#include "ui/view.h"
+#include "ui/views/basic_view.h"
 #include "lvgl.h"
 
 /**
