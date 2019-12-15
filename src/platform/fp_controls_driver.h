@@ -16,7 +16,8 @@ typedef enum {
     BTN_MID_LEFT,
     BTN_MID_RIGHT,
     BTN_RIGHT,
-    BTN_ENCODER
+    BTN_ENCODER,
+    BTN_MAX_INDEX
 } button;
 
 typedef enum encoder_dir_enum {
@@ -24,7 +25,7 @@ typedef enum encoder_dir_enum {
     ENCODER_DIR_BACKWARD
 } encoder_dir;
 
-void buttons_init(button btn);
+void buttons_init(void);
 
 bool button_is_pressed(button btn);
 
