@@ -12,7 +12,7 @@ typedef struct lvgl_view_private_data_struct {
     char const * btn_labels[UI_BUTTONS_COUNT + 1];
 } lvgl_view_private_data_t;
 
-static const char* dummy_btnmap[] = {LV_SYMBOL_HOME, LV_SYMBOL_UP, LV_SYMBOL_DOWN, LV_SYMBOL_OK, ""};
+static const char* dummy_btnmap[] = {" ", " ", " ", " ", ""};
 
 uint32_t lvgl_basic_view_create(ui_view_t* view_to_init)
 {

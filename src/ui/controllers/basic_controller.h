@@ -25,12 +25,12 @@ typedef enum ui_controller_btn_action_enum ui_controller_btn_action;
 
 typedef struct ui_basic_controller_struct ui_basic_controller_t;
 
-typedef int32_t (*btn_handler_fxn_t)(ui_basic_controller_t* ctl,
-                                     uint8_t btn_index,
-                                     ui_controller_btn_action action);
+typedef void (*btn_handler_fxn_t)(ui_basic_controller_t* ctl,
+                                  uint8_t btn_index,
+                                  ui_controller_btn_action action);
 
-typedef int32_t (*enc_handler_fxn_t)(ui_basic_controller_t* ctl,
-                                     ui_controller_encoder_action action);
+typedef void (*enc_handler_fxn_t)(ui_basic_controller_t* ctl,
+                                  ui_controller_encoder_action action);
 
 typedef int32_t (*ctl_process_fxn_t)(ui_basic_controller_t* ctl);
 

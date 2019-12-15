@@ -26,6 +26,7 @@ CFILES += src/main.c \
 	src/platform/core_setup.c \
 	src/platform/syscalls.c \
 	src/platform/display_connection.c \
+	src/platform/fp_controls_driver.c \
 	src/debug/logging.c \
 	src/debug/assertions.c \
 	src/driver/ili9486/display_driver.c \

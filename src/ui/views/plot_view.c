@@ -238,7 +238,7 @@ plot_view_plot_t* plot_view_create_plot(plot_view_t* view, enum plot_view_axis w
                 (chart_color.green << 2),
                 (chart_color.blue << 3));
         plot->series = lv_chart_add_series(data->chart, color);
-        lv_chart_set_series_width(data->chart, 3);
+        lv_chart_set_series_width(data->chart, 5);
         plot->view = view;
         switch (which_axis) {
         case AXIS_VERTICAL_PRIMARY:
