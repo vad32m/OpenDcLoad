@@ -38,6 +38,7 @@ struct ui_basic_controller_struct {
     btn_handler_fxn_t on_btn_action;
     enc_handler_fxn_t on_enc_action;
     ctl_process_fxn_t process_callback;
+    ui_view_t* associated_view;
     void* pvt_data;
 };
 

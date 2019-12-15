@@ -2,13 +2,14 @@
 #define UI_CONTROLLERS_VALUES_CONTROLLER_H_
 
 #include "ui/controllers/basic_controller.h"
+#include "ui/views/values_view.h"
 
 typedef struct values_controller_struct {
     ui_basic_controller_t controller;
     void* pvt_data;
 } values_controller_t;
 
-int32_t values_controller_init(values_controller_t* ctl_to_init);
+int32_t values_controller_init(values_controller_t* ctl_to_init, values_view_t* view);
 
 void values_controller_destroy(values_controller_t* ctl_to_destroy);
 

@@ -34,7 +34,14 @@ CFILES += src/main.c \
 	src/ui/views/values_view.c \
 	src/ui/views/plot_view.c \
 	src/ui/views/param_setup_view.c \
-	src/ui/views/mode_select_view.c
+	src/ui/views/mode_select_view.c \
+	src/ui/controllers/basic_controller.c \
+	src/ui/controllers/mode_select_controller.c \
+	src/ui/controllers/param_setup_controller.c \
+	src/ui/controllers/plot_controller.c \
+	src/ui/controllers/values_controller.c \
+	src/ui/user_interaction_process.c \
+	src/ui/screen.c
 
 INCLUDES = $(FREERTOS_INCLUDES) \
     -I./src/fault_handlers/inc/ \

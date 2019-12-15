@@ -2,13 +2,15 @@
 #define UI_CONTROLLERS_PARAM_SETUP_CONTROLLER_H_
 
 #include "ui/controllers/basic_controller.h"
+#include "ui/views/param_setup_view.h"
 
 typedef struct param_setup_controller_struct {
     ui_basic_controller_t controller;
     void* pvt_data;
 } param_setup_controller_t;
 
-int32_t param_setup_controller_init(param_setup_controller_t* ctl_to_init);
+int32_t param_setup_controller_init(param_setup_controller_t* ctl_to_init,
+                                    param_setup_view_t* view);
 
 void param_setup_controller_destroy(param_setup_controller_t* ctl_to_destroy);
 
