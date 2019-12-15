@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>540</x>
+      <y>480</y>
+      <w>160</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>                         [0..*]
+Controller
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>540</x>
+      <y>350</y>
+      <w>160</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>                         [0..*]
+View
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>830</x>
+      <y>290</y>
+      <w>160</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>symbol=component
+
+
+UI library
+(LittlevGL)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>160</x>
+      <y>0</y>
+      <w>840</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>symbol=component
+User interaction thread</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>0</x>
+      <y>470</y>
+      <w>200</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>symbol=component
+Front panel
+controls driver</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>190</x>
+      <y>470</y>
+      <w>120</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=()-
+Buttons
+interface</panel_attributes>
+    <additional_attributes>100.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>190</x>
+      <y>530</y>
+      <w>120</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=()-
+Encoder
+interface</panel_attributes>
+    <additional_attributes>100.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>390</x>
+      <y>290</y>
+      <w>350</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>symbol=component
+Screen
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>410</y>
+      <w>40</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>r1=1
+m1=1
+r1pos=0,12
+m1pos=0,-10
+lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>290</x>
+      <y>470</y>
+      <w>110</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=)-</panel_attributes>
+    <additional_attributes>20.0;20.0;90.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>290</x>
+      <y>530</y>
+      <w>110</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=)-</panel_attributes>
+    <additional_attributes>20.0;20.0;90.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>690</x>
+      <y>370</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>540</x>
+      <y>730</y>
+      <w>170</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>symbol=component
+
+Load parameter
+monitor</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>620</x>
+      <y>660</y>
+      <w>30</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=()-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>550</y>
+      <w>50</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=-(</panel_attributes>
+    <additional_attributes>20.0;10.0;20.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>950</x>
+      <y>200</y>
+      <w>90</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=()-
+Periodic
+process
+interface</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>840</x>
+      <y>200</y>
+      <w>50</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=()-
+Init</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>200</y>
+      <w>90</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=()-
+Periodic
+process
+interface</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>200</y>
+      <w>50</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=()-
+Init</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>280</y>
+      <w>70</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=[].&gt;
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;180.0;50.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>490</x>
+      <y>130</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-(</panel_attributes>
+    <additional_attributes>20.0;10.0;20.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>620</x>
+      <y>130</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-(</panel_attributes>
+    <additional_attributes>20.0;10.0;20.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>830</x>
+      <y>130</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-(</panel_attributes>
+    <additional_attributes>20.0;10.0;20.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>940</x>
+      <y>130</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-(</panel_attributes>
+    <additional_attributes>20.0;10.0;20.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>470</y>
+      <w>70</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=)-[]</panel_attributes>
+    <additional_attributes>40.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>530</y>
+      <w>70</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=)-[]</panel_attributes>
+    <additional_attributes>40.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>430</x>
+      <y>470</y>
+      <w>130</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=()-
+Buttons
+listener</panel_attributes>
+    <additional_attributes>10.0;20.0;110.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>430</x>
+      <y>530</y>
+      <w>130</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=()-
+Encoder
+listener</panel_attributes>
+    <additional_attributes>10.0;20.0;110.0;20.0</additional_attributes>
+  </element>
+</diagram>
