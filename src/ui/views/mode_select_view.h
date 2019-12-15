@@ -40,8 +40,9 @@ int32_t mode_select_view_init(mode_select_view_t* view_to_init);
  * @param modes_num number of modes in the array
  * @return 0 on successful operation, error code otherwise
  */
-int32_t mode_select_view_set_modes_list(mode_select_view_t* view, mode_select_view_list_item_t* modes,
-                                        uint8_t modes_num);
+int32_t mode_select_view_set_modes_list(mode_select_view_t* view,
+        mode_select_view_list_item_t* modes,
+        uint8_t modes_num);
 /**
  * Set selection of current mode (highlight one item in the list)
  * @param view pointer to view

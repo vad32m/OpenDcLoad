@@ -10,6 +10,8 @@
 
 typedef struct ui_view_struct ui_view_t;
 
+#define UI_VIEW_BTN_COUNT 4
+
 /**
  * Base class for all views in the system
  */
