@@ -4,11 +4,12 @@
  * (see UI wireframes, view in the middle of upper row)
  */
 
-#ifndef SRC_UI_VIEWS_PLOT_VIEW_H_
-#define SRC_UI_VIEWS_PLOT_VIEW_H_
+#ifndef UI_VIEWS_PLOT_VIEW_H_
+#define UI_VIEWS_PLOT_VIEW_H_
 
 #include <stdint.h>
 
+#include "common/number_invariant.h"
 #include "ui/views/basic_view.h"
 /**
  * @brief shorthand typedef for user convenience
@@ -31,25 +32,6 @@ enum plot_view_axis {
     AXIS_VERTICAL_SECONDARY,//!< Right vertical axis
     AXIS_HORIZONTAL         //!< Horizontal axis (usually time)
 };
-
-/**
- * Enumeration to specify how to interpret invariant number type
- */
-enum num_invariant_type {
-    NUMBER_INVARIANT_INT, //!< Invariant number is integer
-    NUMBER_INVARIANT_FLOAT//!< Invariant number is floating point number
-};
-
-/**
- * Structure that contains either float or integer number
- */
-typedef struct number_invariant_struct {
-    enum num_invariant_type type;
-    union {
-        float float_repr;
-        int16_t int_repr;
-    };
-} number_invariant_t;
 
 /**
  * Structure containing description of two ranges:
@@ -128,4 +110,4 @@ void plot_view_plot_destroy(plot_view_plot_t* plot_to_destroy);
  */
 void plot_view_destroy(plot_view_t* view_to_destroy);
 
-#endif /* SRC_UI_VIEWS_PLOT_VIEW_H_ */
+#endif /* UI_VIEWS_PLOT_VIEW_H_ */
