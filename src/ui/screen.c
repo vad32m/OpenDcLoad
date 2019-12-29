@@ -98,11 +98,6 @@ int32_t screen_process(ui_screen_t* screen)
         if (current_state != screen->button_states[i]) {
             screen->button_states[i] = current_state;
             ui_controller_notify_button(ctl, i, current_state ? UI_BTN_PRESSED : UI_BTN_RELEASED);
-            //TODO: dummy functionality for demo, shall be removed
-            if (!current_state && (i == BTN_ENCODER)) {
-                screen->pend_controller_set++;
-                screen->pend_controller_set %= UI_SCREEN_MAX_SCREENS;
-            }
         }
     }
 
@@ -121,3 +116,14 @@ int32_t screen_process(ui_screen_t* screen)
 
     return ERR_OK;
 }
+
+int32_t screen_set_active(ui_screen_t* screen, ui_screen which_screen)
+{
+	if (which_screen < UI_SCREEN_MAX_SCREENS) {
+		screen->pend_controller_set = which_screen;
+		return ERR_OK;
+	} else {
+		return ERR_INARG;
+	}
+}
+
