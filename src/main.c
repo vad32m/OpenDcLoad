@@ -13,6 +13,9 @@
 #include "platform/display_connection.h"
 
 #include "ui/user_interaction_process.h"
+#include "ui/screen.h"
+
+#include "app/work_mode_facade.h"
 
 
 static void
@@ -96,8 +99,11 @@ main(void)
     volatile int b = 10/a;
 #endif
 
+    wm_facade_init(3);
     user_interaction_init(&display);
     user_interaction_start_process(4);
+    ui_screen_t* scr = screen_get_instance();
+    screen_set_active(scr, UI_SCREEN_MODE_SELECT);
 
     vTaskStartScheduler();
 

@@ -42,7 +42,13 @@ CFILES += src/main.c \
 	src/ui/controllers/plot_controller.c \
 	src/ui/controllers/values_controller.c \
 	src/ui/user_interaction_process.c \
-	src/ui/screen.c
+	src/ui/screen.c \
+	src/app/work_mode_facade.c \
+	src/app/wm_constant_current.c \
+	src/app/wm_constant_power.c \
+	src/app/wm_constant_resistance.c \
+	src/app/wm_constant_voltage.c \
+	src/app/work_mode.c
 
 INCLUDES = $(FREERTOS_INCLUDES) \
     -I./src/fault_handlers/inc/ \
