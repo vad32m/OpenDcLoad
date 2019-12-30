@@ -34,6 +34,8 @@ struct work_mode_struct {
 	work_mode_release_fxn stop_fxn;
 	work_mode_release_fxn deinit_fxn;
     wm_config_param_t configurable_param;
+    wm_process_param_t* output_params;
+    uint8_t output_params_count;
     const char* name;
     void* pvt_data;
 };

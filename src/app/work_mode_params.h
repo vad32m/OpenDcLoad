@@ -35,6 +35,10 @@ typedef struct {
         int16_t int_step;
     };
 
+    number_invariant_t min;
+
+    number_invariant_t max;
+
     const wm_param_descr_t* descr;
 } wm_config_param_t;
 

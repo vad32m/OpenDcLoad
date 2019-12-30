@@ -17,7 +17,7 @@ enum wm_event {
 
 typedef void (*wm_change_listener_fxn)(enum wm_event event);
 
-int32_t wm_facade_init(void);
+int32_t wm_facade_init(uint32_t wm_thread_priority);
 
 int32_t wm_facade_get_mode_count(void);
 
