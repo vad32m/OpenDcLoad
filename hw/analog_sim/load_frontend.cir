@@ -7,8 +7,8 @@ Shape Version=11.00
 Screen=1680,1050
 MCAPVersion=12.2.0.3
 Key ID=Demo
-NLCnt=120
-TXCnt=5
+NLCnt=155
+TXCnt=8
 
 [shapedef]
 Name=Animated SPDT Switch
@@ -152,7 +152,7 @@ Name=Resistor
 Definition=Resistor
 Shape=Resistor
 Mask=6913
-Used=163
+Used=170
 memo=Resistor
 Label Offset=18,6,8,11
 PinCnt=2
@@ -164,7 +164,7 @@ Name=Ground
 Definition=Ground
 Shape=Ground
 Mask=1793
-Used=271
+Used=277
 memo=Ground
 Label Offset=0,0,0,0
 PinCnt=1
@@ -187,7 +187,7 @@ Name=Tie
 Definition=Tie
 Shape=Tie
 Mask=5632
-Used=8
+Used=9
 memo=Ties two nodes together
 Label Offset=11,-6,-6,8
 PinCnt=1
@@ -213,7 +213,7 @@ Name=AD8628
 Definition=Subckt
 Shape=Opamp5
 Mask=4224
-Used=2
+Used=3
 memo=Zero Drift, Single Supply, Rail-to-Rail I/O Opamp
 Label Offset=51,31,-10,41
 PinCnt=5
@@ -228,7 +228,7 @@ Name=INA214
 Definition=Subckt
 Shape=Comp6
 Mask=4224
-Used=1
+Used=2
 memo=Voltage Output, High or Low Side Measurement, Bidirectional Zero Drift Series Current Shunt Monitor Gain=100
 Link=http://www.ti.com/lit/ds/symlink/ina210.pdf
 Label Offset=27,42,-7,24
@@ -258,7 +258,7 @@ Name=Pot
 Definition=Macro
 Shape=Pot
 Mask=4096
-Used=1
+Used=3
 memo=Potentiometer Macro
 Label Offset=32,4,9,11
 PinCnt=3
@@ -271,7 +271,7 @@ Name=Animated SPST Switch
 Definition=ANIMATED SPST SWITCH
 Shape=Animated SPST Switch
 Mask=4352
-Used=3
+Used=5
 memo=Animated Single Pole, Single Throw Switch
 Label Offset=2,5,11,11
 PinCnt=2
@@ -1015,7 +1015,7 @@ Style=256
 
 [Attr]
 ON=0,0,Saved_None
-V=DC 2.048 AC 0 0 
+V=DC 2.048 AC 0 0
 Style=256
 
 [Attr]
@@ -1143,7 +1143,7 @@ Style=8192
 
 [Attr]
 ON=11,25,STATE
-V=Open
+V=Closed
 
 [Attr]
 ON=11,39,RON
@@ -1180,17 +1180,16 @@ Pxs=840,464,872,464
 
 [Comp]
 Name=Resistor
-Px=1064,224
-Rot=1
+Px=1112,208
 
 [Attr]
-ON=-30,-7,PART
+ON=11,9,PART
 V=R11
 Style=8192
 
 [Attr]
-ON=-34,9,RESISTANCE
-V=620K
+ON=9,28,RESISTANCE
+V=330K
 Style=8192
 
 [Attr]
@@ -1198,14 +1197,11 @@ ON=0,0,PACKAGE
 V
 
 [Wire]
-Pxs=1064,224,1216,224
-
-[Wire]
-Pxs=1216,224,1216,408
+Pxs=1216,192,1216,208
 
 [Comp]
 Name=Resistor
-Px=1064,288
+Px=1096,256
 Rot=1
 
 [Attr]
@@ -1215,7 +1211,7 @@ Style=8192
 
 [Attr]
 ON=-34,21,RESISTANCE
-V=3.6K
+V=6.8K
 Style=8192
 
 [Attr]
@@ -1224,11 +1220,11 @@ V
 
 [Comp]
 Name=Ground
-Px=1064,336
+Px=1096,304
 Rot=7
 
 [Wire]
-Pxs=1064,272,1064,280
+Pxs=1096,208,1096,256
 
 [Comp]
 Name=Animated SPST Switch
@@ -1257,12 +1253,6 @@ ON=0,0,PACKAGE
 V
 
 [Wire]
-Pxs=872,280,1064,280
-
-[Wire]
-Pxs=1064,280,1064,288
-
-[Wire]
 Pxs=872,328,872,416
 
 [Wire]
@@ -1289,9 +1279,6 @@ V
 
 [Wire]
 Pxs=1216,128,1216,144
-
-[Wire]
-Pxs=1216,192,1216,224
 
 [Wire]
 Pxs=1216,456,1216,616
@@ -1324,7 +1311,7 @@ Style=8192
 
 [Attr]
 ON=11,25,STATE
-V=Closed
+V=Open
 
 [Attr]
 ON=11,39,RON
@@ -1340,6 +1327,265 @@ V
 
 [Wire]
 Pxs=752,424,792,424
+
+[Comp]
+Name=AD8628
+Px=656,192
+Rot=6
+
+[Attr]
+ON=-66,31,PART
+V=X9
+Style=8192
+
+[Attr]
+ON=-51,45,NAME
+V=AD8628
+
+[Attr]
+ON=-51,73,PACKAGE
+V=SOIC8
+
+[Comp]
+Name=Ground
+Px=624,248
+Rot=7
+
+[Wire]
+Pxs=656,240,688,240
+
+[Wire]
+Pxs=624,168,624,184
+
+[Comp]
+Name=Resistor
+Px=648,304
+Rot=2
+
+[Attr]
+ON=-30,-23,PART
+V=R15
+Style=8192
+
+[Attr]
+ON=-34,9,RESISTANCE
+V=36K
+Style=8192
+
+[Attr]
+ON=0,0,PACKAGE
+V
+
+[Comp]
+Name=Resistor
+Px=752,304
+Rot=2
+
+[Attr]
+ON=-30,-23,PART
+V=R16
+Style=8192
+
+[Attr]
+ON=-34,9,RESISTANCE
+V=1.5K
+Style=8192
+
+[Attr]
+ON=0,0,PACKAGE
+V
+
+[Comp]
+Name=Ground
+Px=768,312
+Rot=7
+
+[Wire]
+Pxs=552,216,584,216
+
+[Wire]
+Pxs=552,216,552,304
+
+[Wire]
+Pxs=648,304,688,304
+
+[Wire]
+Pxs=688,240,688,304
+
+[Wire]
+Pxs=688,304,704,304
+
+[Comp]
+Name=Tie
+Px=624,168
+Rot=5
+
+[Attr]
+ON=-15,-26,PART
+V=VCC_5
+Style=8192
+
+[Wire]
+Pxs=552,304,600,304
+
+[Wire]
+Pxs=752,304,768,304
+
+[Wire]
+Pxs=768,304,768,312
+
+[Comp]
+Name=Resistor
+Px=968,216
+Rot=1
+
+[Attr]
+ON=-30,-7,PART
+V=R17
+Style=8192
+
+[Attr]
+ON=-34,9,RESISTANCE
+V=56K
+Style=8192
+
+[Attr]
+ON=0,0,PACKAGE
+V
+
+[Comp]
+Name=Resistor
+Px=968,280
+Rot=1
+
+[Attr]
+ON=-33,5,PART
+V=R18
+Style=8192
+
+[Attr]
+ON=-34,21,RESISTANCE
+V=22K
+Style=8192
+
+[Attr]
+ON=0,0,PACKAGE
+V
+
+[Comp]
+Name=Ground
+Px=968,328
+Rot=7
+
+[Wire]
+Pxs=1160,208,1216,208
+
+[Wire]
+Pxs=1216,208,1216,408
+
+[Wire]
+Pxs=968,208,1096,208
+
+[Wire]
+Pxs=968,264,968,272
+
+[Wire]
+Pxs=968,208,968,216
+
+[Wire]
+Pxs=872,272,872,280
+
+[Wire]
+Pxs=872,272,968,272
+
+[Wire]
+Pxs=968,272,968,280
+
+[Wire]
+Pxs=1096,208,1112,208
+
+[Wire]
+Pxs=872,192,872,272
+
+[Comp]
+Name=Resistor
+Px=808,192
+Rot=2
+
+[Attr]
+ON=-30,-23,PART
+V=R19
+Style=8192
+
+[Attr]
+ON=-34,9,RESISTANCE
+V=100K
+Style=8192
+
+[Attr]
+ON=0,0,PACKAGE
+V
+
+[Wire]
+Pxs=656,192,760,192
+
+[Wire]
+Pxs=808,192,872,192
+
+[Comp]
+Name=Resistor
+Px=472,240
+Rot=1
+
+[Attr]
+ON=-30,-7,PART
+V=R20
+Style=8192
+
+[Attr]
+ON=-34,9,RESISTANCE
+V=180K
+Style=8192
+
+[Attr]
+ON=0,0,PACKAGE
+V
+
+[Comp]
+Name=Resistor
+Px=472,320
+Rot=1
+
+[Attr]
+ON=-30,-7,PART
+V=R21
+Style=8192
+
+[Attr]
+ON=-34,9,RESISTANCE
+V=120K
+Style=8192
+
+[Attr]
+ON=0,0,PACKAGE
+V
+
+[Comp]
+Name=Ground
+Px=472,392
+Rot=7
+
+[Wire]
+Pxs=472,216,472,240
+
+[Wire]
+Pxs=472,216,552,216
+
+[Wire]
+Pxs=472,288,472,320
+
+[Wire]
+Pxs=472,368,472,392
 
 [Grid Text]
 Text="OPAx189"
@@ -1392,6 +1638,39 @@ JustifyH=Left
 JustifyV=Bottom
 CBorder=None
 
+[Grid Text]
+Text="Gain = 25"
+Text="10 V -> 202 mV -> 5 V"
+Text="10 mV -> 202 uV -> 5 mV"
+Px=392,192
+GridSnap=True
+JustifyH=Left
+JustifyV=Bottom
+CBorder=None
+
+[Grid Text]
+Text="Gain = 0.02016"
+Text="350 V -> 7.06 V"
+Text="100 V ->  2.02 V"
+Text="1 V -> 20.2 mV"
+Text="10 mV -> 202 uV"
+Px=1064,208
+GridSnap=True
+JustifyH=Left
+JustifyV=Bottom
+CBorder=None
+
+[Grid Text]
+Text="Gain = 0.28"
+Text="350 V -> 7.06 V -> 1.98 V"
+Text="1 V -> 20.2 mV -> 5.66 mV"
+Text="100 mV -> 2.02 mV -> 566 uV"
+Px=888,400
+GridSnap=True
+JustifyH=Left
+JustifyV=Bottom
+CBorder=None
+
 [Schematic]
 CurrentSection 0=0
 CurrentSection 1=0
@@ -1400,7 +1679,7 @@ CurrentSection 3=0
 Splitter.xs=0
 Splitter.ys=0
 TextQuad=4099
-Scale=1.3333333333333333
+Scale=1
 GridType=Normal
 GridUser=10
 ShapeGroups="Main","Euro","Polarity","Main1","Main11","Electrolytic","GroundArrow","DeMorgan"
@@ -1589,9 +1868,9 @@ PrinterScale=1
 Scale 0=1
 Scale 1=1
 Scale 2=1
-SB 3=345,71
-Scale 3=1.3333333333333333
-Px=714,507
+SB 3=317,52
+Scale 3=1
+Px=510,457
 WinBackGround Color=#FFFFFF
 Select Color=#FF0000
 Anchor Color=#000000
@@ -1640,7 +1919,6 @@ Type=Text
 Print=False
 Enable=True
 Name=Text
-SB 0=0,2
 Font=Height=-15,FStyle=0,Color=#000000,Name=Courier New
 Comment Color=#008000
 WinBackGround Color=#FFFFFF
@@ -1656,7 +1934,6 @@ Type=Text
 Print=False
 Enable=True
 Name=Models
-SB 0=0,2
 Font=Height=-15,FStyle=0,Color=#000000,Name=Courier New
 Comment Color=#008000
 WinBackGround Color=#FFFFFF
@@ -2693,8 +2970,8 @@ NOFmtY=3E
 Analysis=DC
 Plt=2
 AliasID=2
-XExp=V(V15)
-YExp=I(R1)
+XExp=I(R1)
+YExp=V(V15)
 XRng=AutoAlways
 YRng=AutoAlways
 Options=LINEARX,LINEARY
